@@ -16,15 +16,15 @@ public class ProductController : ControllerBase
 
     
     [HttpGet]
-    public async Task<IActionResult> GetProducts()
+    public async Task<IActionResult> GetAllProducts()
     {
-        return Ok(await productService.findAll());
+        return Ok(await productService.FindAll());
     }
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetProduct(int id)
+    public async Task<IActionResult> GetProductById(int id)
     {
-        var product = await productService.findById(id);
+        var product = await productService.FindById(id);
         if (product == null)
         {
             return NoContent();
@@ -37,7 +37,7 @@ public class ProductController : ControllerBase
     {
         
         Product product = await productService.AddProduct(productDTO);
-        return CreatedAtAction(nameof(GetProduct), new { id = product.id }, product);
+        return CreatedAtAction(nameof(GetProductById), new { id = product.id }, product);
     }
     
 }

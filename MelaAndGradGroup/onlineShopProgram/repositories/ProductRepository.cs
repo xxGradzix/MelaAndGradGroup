@@ -4,7 +4,6 @@ using MelaAndGradGroup.onlineShopProgram.repositories;
 using Microsoft.EntityFrameworkCore;
 
 
-// public class ProductRepository : Repository<Product, int> {
 public class ProductRepository : IProductRepository {
 
     private readonly AppDbContext _context;
@@ -15,39 +14,39 @@ public class ProductRepository : IProductRepository {
     }
 
 
-    public async Task<List<Product>> findAll()
+    public async Task<List<Product>> FindAll()
     {
         return await _context.Products.ToListAsync();
     }
-    public async Task<Product> findByID(int id)
+    public async Task<Product> FindByID(int id)
     {
         return await _context.Products.FindAsync(id);
     }
 
-    public async Task<Product> save(Product entity)
+    public async Task<Product> Save(Product entity)
     {
         _context.Products.Add(entity);
         await _context.SaveChangesAsync();
         return entity;
     }
 
-    public async Task update(Product user)
+    public async Task Update(Product user)
     {
         _context.Products.Update(user);
         await _context.SaveChangesAsync();
     }
 
-    public async Task delete(Product entity)
+    public async Task Delete(Product entity)
     {
         if (entity != null) {
             _context.Products.Remove(entity);
             await _context.SaveChangesAsync();
         }
     }
-    public async Task delete(int id)
+    public async Task Delete(int id)
     {
         var product = await _context.Products.FindAsync(id);
-        delete(product);
+        Delete(product);
     }
     
 }

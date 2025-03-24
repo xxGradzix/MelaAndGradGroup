@@ -3,10 +3,10 @@ namespace MelaAndGradGroup.onlineShopProgram;
 public interface Repository<T, ID> where T : class
 {
     
-    Task<T> findByID(ID id);
-    Task<T> save(T entity);
-    Task delete(T entity);
-    Task update(T entity);
-    Task<List<T>> findAll();
+    Task<T> FindByID(ID id);
+    Task<T> Save(T entity);
+    Task Delete(T entity);
+    Task Update(T entity);
+    Task<List<T>> FindAll();
 
 }

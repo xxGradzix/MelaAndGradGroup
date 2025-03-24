@@ -29,7 +29,6 @@ public class Product
         this.description = description;
     }
     
-    
     [JsonIgnore]
     [NotMapped]
     public ExecutionContext Context { get; set; } 
