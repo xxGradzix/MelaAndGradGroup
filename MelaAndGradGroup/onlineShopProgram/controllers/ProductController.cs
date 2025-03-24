@@ -1,5 +1,4 @@
 using MelaAndGradGroup.onlineShopProgram.services;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MelaAndGradGroup.onlineShopProgram.controllers;
@@ -15,18 +14,17 @@ public class ProductController : ControllerBase
         this.productService = productService;
     }
 
-    [HttpGet]
+    
+    [HttpGet("test")]
     public async Task<IActionResult> GetProducts()
     {
-        // var products = await productService.findAll();
-        return Ok("products");
+        return Ok(productService.findAll());
     }
     
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProduct(int id)
     {
-        // var product = await productService.findByID(id);
-        // if (product == null) return NotFound();
         return Ok("product");
     }
+    
 }

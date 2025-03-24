@@ -1,4 +1,3 @@
-using MelaAndGradGroup.onlineShopProgram.entities;
 
 namespace MelaAndGradGroup.onlineShopProgram.data;
 
@@ -9,4 +8,5 @@ public class AppDbContext : DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
     public DbSet<Product> Products { get; set; }
+    
 }

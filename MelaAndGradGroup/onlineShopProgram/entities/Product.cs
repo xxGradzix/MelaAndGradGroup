@@ -1,19 +1,18 @@
-namespace MelaAndGradGroup.onlineShopProgram.entities;
-
 public class Product
 {
-    private Guid id;
-    private string name;
-    private double price;
-    private int quantity;
-    private string description;
-    
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public double Price { get; set; }
+    public int Quantity { get; set; }
+    public string Description { get; set; }
+
+    public Product() { }
+
     public Product(string name, double price, int quantity, string description)
     {
-        this.id = Guid.NewGuid();
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-        this.description = description;
+        Name = name;
+        Price = price;
+        Quantity = quantity;
+        Description = description;
     }
 }

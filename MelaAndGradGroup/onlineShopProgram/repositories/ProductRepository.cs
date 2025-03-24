@@ -1,6 +1,5 @@
 using MelaAndGradGroup.onlineShopProgram;
 using MelaAndGradGroup.onlineShopProgram.data;
-using MelaAndGradGroup.onlineShopProgram.entities;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -37,8 +36,7 @@ public class ProductRepository : Repository<Product, int> {
 
     public async Task delete(Product entity)
     {
-        if (entity != null)
-        {
+        if (entity != null) {
             _context.Products.Remove(entity);
             await _context.SaveChangesAsync();
         }
