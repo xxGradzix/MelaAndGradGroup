@@ -1,18 +1,25 @@
+//using System.Text.Json.Serialization;
+
+using System.Text.Json.Serialization;
+
 public class Product
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public double Price { get; set; }
-    public int Quantity { get; set; }
-    public string Description { get; set; }
+    public int? id { get; set; }
+    public String name { get; set; }
+    public double price { get; set; }
+    public int quantity { get; set; }
+    public String description { get; set; }
 
     public Product() { }
 
-    public Product(string name, double price, int quantity, string description)
+    public Product(String name, double price, int quantity, String description)
     {
-        Name = name;
-        Price = price;
-        Quantity = quantity;
-        Description = description;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.description = description;
     }
+
+    [JsonIgnore]
+    public ExecutionContext Context { get; set; }
 }

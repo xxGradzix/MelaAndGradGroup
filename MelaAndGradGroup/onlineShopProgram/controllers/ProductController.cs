@@ -15,7 +15,7 @@ public class ProductController : ControllerBase
     }
 
     
-    [HttpGet("test")]
+    [HttpGet]
     public async Task<IActionResult> GetProducts()
     {
         return Ok(productService.findAll());
@@ -26,5 +26,12 @@ public class ProductController : ControllerBase
     {
         return Ok("product");
     }
-    
+
+    [HttpPost]
+    public async Task<IActionResult> CreateProduct([FromBody] ProductDTO productDTO)
+    {
+        return Ok(productService.AddProduct(productDTO));
+        //productService.AddProduct(productDTO);
+        //return Ok();
+    }
 }
