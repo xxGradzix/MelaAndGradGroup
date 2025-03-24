@@ -18,20 +18,20 @@ public class ProductController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetProducts()
     {
-        return Ok(productService.findAll());
+        return Ok(await productService.findAll());
     }
     
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProduct(int id)
     {
-        return Ok("product");
+        return Ok(await productService.findById(id));
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateProduct([FromBody] ProductDTO productDTO)
     {
-        return Ok(productService.AddProduct(productDTO));
-        //productService.AddProduct(productDTO);
-        //return Ok();
+        await productService.AddProduct(productDTO);
+        return Ok();
     }
+    
 }

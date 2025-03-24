@@ -1,4 +1,3 @@
-
 namespace MelaAndGradGroup.onlineShopProgram.data;
 
 using Microsoft.EntityFrameworkCore;
@@ -9,14 +8,20 @@ public class AppDbContext : DbContext
 
     public DbSet<Product> Products { get; set; }
 
-    //public DbSet<ExecutionContext> ExecutionContexts { get; set; }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseMySql("Server=localhost;Port=3306;Database=test;User ID=root;Password=;", ServerVersion.AutoDetect("Server=localhost;Port=3306;Database=test;User ID=root;Password=;"));
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Product>()
-            .HasKey(e => e.id);
-        
-        //modelBuilder.Entity<ExecutionContext>()
-        //    .HasNoKey();
+        modelBuilder.Entity<Product>(b =>
+        {
+            b.HasKey(e => e.id);
+            b.Property(e => e.id).ValueGeneratedOnAdd();
+            b.Property(e => e.name).IsRequired().HasMaxLength(100);
+            b.Property(e => e.description).HasMaxLength(500);
+        });
     }
+
 }

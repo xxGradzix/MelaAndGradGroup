@@ -12,11 +12,11 @@ public class ProductRepository : Repository<Product, int> {
         _context = context;
     }
 
+
     public async Task<List<Product>> findAll()
     {
         return await _context.Products.ToListAsync();
     }
-
     public async Task<Product> findByID(int id)
     {
         return await _context.Products.FindAsync(id);
@@ -24,7 +24,7 @@ public class ProductRepository : Repository<Product, int> {
 
     public async Task save(Product entity)
     {
-        await _context.Products.AddAsync(entity);
+        _context.Products.Add(entity);
         await _context.SaveChangesAsync();
     }
 

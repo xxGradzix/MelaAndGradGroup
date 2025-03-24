@@ -13,18 +13,16 @@ public class ProductService {
     
     public async Task<List<Product>> findAll()
     {
-        
-        List<Product> products = new List<Product>();
-
-        Product product = new Product("test", 0.5, 1, "test");
-        products.Add(product);
-        
-        return products;
+        return await repository.findAll();
     }
-
-    public Task AddProduct(ProductDTO productDTO)
+    public async Task AddProduct(ProductDTO productDTO)
     {
         Product product = new Product(productDTO.name, productDTO.price, productDTO.quantity, productDTO.description);
-        return repository.save(product);
+        await repository.save(product);
+    }
+
+    public async Task<Product> findById(int id)
+    {
+        return await repository.findByID(id);
     }
 }
