@@ -7,9 +7,9 @@ namespace MelaAndGradGroup.onlineShopProgram.controllers;
 [Route("api/V1/[controller]")]
 public class ProductController : ControllerBase
 {
-    private readonly ProductService productService;
+    private readonly IProductService productService;
 
-    public ProductController(ProductService productService)
+    public ProductController(IProductService productService)
     {
         this.productService = productService;
     }
@@ -24,14 +24,20 @@ public class ProductController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProduct(int id)
     {
-        return Ok(await productService.findById(id));
+        var product = await productService.findById(id);
+        if (product == null)
+        {
+            return NoContent();
+        }
+        return Ok(product);
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateProduct([FromBody] ProductDTO productDTO)
     {
-        await productService.AddProduct(productDTO);
-        return Ok();
+        
+        Product product = await productService.AddProduct(productDTO);
+        return CreatedAtAction(nameof(GetProduct), new { id = product.id }, product);
     }
     
 }

@@ -1,9 +1,11 @@
 using MelaAndGradGroup.onlineShopProgram;
 using MelaAndGradGroup.onlineShopProgram.data;
+using MelaAndGradGroup.onlineShopProgram.repositories;
 using Microsoft.EntityFrameworkCore;
 
 
-public class ProductRepository : Repository<Product, int> {
+// public class ProductRepository : Repository<Product, int> {
+public class ProductRepository : IProductRepository {
 
     private readonly AppDbContext _context;
 
@@ -22,10 +24,11 @@ public class ProductRepository : Repository<Product, int> {
         return await _context.Products.FindAsync(id);
     }
 
-    public async Task save(Product entity)
+    public async Task<Product> save(Product entity)
     {
         _context.Products.Add(entity);
         await _context.SaveChangesAsync();
+        return entity;
     }
 
     public async Task update(Product user)

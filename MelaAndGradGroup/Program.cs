@@ -31,6 +31,7 @@
 // app.Run();
 
 using MelaAndGradGroup.onlineShopProgram.data;
+using MelaAndGradGroup.onlineShopProgram.repositories;
 using MelaAndGradGroup.onlineShopProgram.services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -44,8 +45,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         .EnableSensitiveDataLogging()
         .EnableDetailedErrors(), ServiceLifetime.Scoped);
 
-builder.Services.AddScoped<ProductRepository>();
-builder.Services.AddScoped<ProductService>();
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddControllers();
 

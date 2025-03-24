@@ -1,12 +1,21 @@
 
 
+using MelaAndGradGroup.onlineShopProgram.repositories;
+
 namespace MelaAndGradGroup.onlineShopProgram.services;
 
-public class ProductService {
+public class ProductService : IProductService {
     
-    private ProductRepository repository;
+    // private ProductRepository repository;
+    //
+    // public ProductService(ProductRepository repository)
+    // {
+    //     this.repository = repository;
+    // }
     
-    public ProductService(ProductRepository repository)
+    private IProductRepository repository;
+    
+    public ProductService(IProductRepository repository)
     {
         this.repository = repository;
     }
@@ -15,10 +24,10 @@ public class ProductService {
     {
         return await repository.findAll();
     }
-    public async Task AddProduct(ProductDTO productDTO)
+    public async Task<Product> AddProduct(ProductDTO productDTO)
     {
         Product product = new Product(productDTO.name, productDTO.price, productDTO.quantity, productDTO.description);
-        await repository.save(product);
+        return await repository.save(product);
     }
 
     public async Task<Product> findById(int id)
