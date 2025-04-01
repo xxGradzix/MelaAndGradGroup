@@ -6,7 +6,10 @@ using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddJsonFile("appsetings.json", optional: false, reloadOnChange: true);
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//var connectionString = "server=localhost;port=3306;user=root;password=;database=test";
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
         .EnableSensitiveDataLogging()
@@ -30,7 +33,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Ensure the database and schemas are created
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();

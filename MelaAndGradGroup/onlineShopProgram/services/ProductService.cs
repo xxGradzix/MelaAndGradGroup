@@ -1,6 +1,7 @@
 
 
 using MelaAndGradGroup.onlineShopProgram.repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace MelaAndGradGroup.onlineShopProgram.services;
 
@@ -26,5 +27,34 @@ public class ProductService : IProductService {
     public async Task<Product> FindById(int id)
     {
         return await repository.FindByID(id);
+    }
+
+    public async Task<bool> DeleteProductById(int id)
+    {
+        var product = await repository.FindByID(id);
+        if (product == null)
+        {
+            return false;
+        }
+        await repository.Delete(product);
+        return true;
+    }
+
+    public async Task<Product> UpdateProductById(int id, ProductDTO productDTO)
+    {
+        var product = await repository.FindByID(id);
+        if (product == null)
+        {
+            throw new KeyNotFoundException("Product with ID " + id + " not found.");
+        }
+
+        product.name = productDTO.name;
+        product.price = productDTO.price;
+        product.quantity = productDTO.quantity;
+        product.description = productDTO.description;
+
+        await repository.Update(product);
+
+        return product;
     }
 }

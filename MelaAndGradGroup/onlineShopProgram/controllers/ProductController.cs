@@ -35,9 +35,44 @@ public class ProductController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateProduct([FromBody] ProductDTO productDTO)
     {
-        
         Product product = await productService.AddProduct(productDTO);
         return CreatedAtAction(nameof(GetProductById), new { id = product.id }, product);
     }
-    
+
+    [HttpGet("test")]
+    public async Task<IActionResult> GetProductByRequestParam([FromQuery(Name = "id")] int id)
+    {
+        var product = await productService.FindById(id);
+        if (product == null)
+        {
+            return NoContent();
+        }
+        return Ok(product);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> RemoveProduct(int id)
+    {
+        var result = await productService.DeleteProductById(id);
+        if (!result)
+        {
+            return NotFound("Product with ID " + id + " not found.");
+        }
+        return NoContent();
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> ModifyProduct(int id, [FromBody] ProductDTO productDTO)
+    {
+        try
+        {
+            Product product = await productService.UpdateProductById(id, productDTO);
+            return Ok(product);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+    }
+
 }
