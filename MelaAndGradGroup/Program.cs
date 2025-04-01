@@ -6,14 +6,21 @@ using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddJsonFile("appsetings.json", optional: false, reloadOnChange: true);
-
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-//var connectionString = "server=localhost;port=3306;user=root;password=;database=test";
+
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("Brak connection stringa w konfiguracji.");
+}
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
-        .EnableSensitiveDataLogging()
-        .EnableDetailedErrors(), ServiceLifetime.Scoped);
+        options.UseMySql(
+                connectionString, 
+                ServerVersion.AutoDetect(connectionString))
+            .EnableSensitiveDataLogging()
+            .EnableDetailedErrors(),
+    ServiceLifetime.Scoped);
+
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();

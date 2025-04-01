@@ -4,14 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
+        
+    }
 
     public DbSet<Product> Products { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseMySql("Server=localhost;Port=3306;Database=test;User ID=root;Password=;", ServerVersion.AutoDetect("Server=localhost;Port=3306;Database=test;User ID=root;Password=;"));
-    }
+    private readonly IConfiguration _configuration;
+    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
