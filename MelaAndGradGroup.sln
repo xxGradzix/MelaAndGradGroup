@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelaAndGradGroup", "MelaAndGradGroup\MelaAndGradGroup.csproj", "{280BB9B6-FD84-4D9E-A2E7-D6396AD61B15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelaAndGradGroupTests", "MelaAndGradGroupTests\MelaAndGradGroupTests.csproj", "{CDACCDA7-D2DB-4B51-93E7-2CEB0F8C0DF8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{280BB9B6-FD84-4D9E-A2E7-D6396AD61B15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{280BB9B6-FD84-4D9E-A2E7-D6396AD61B15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{280BB9B6-FD84-4D9E-A2E7-D6396AD61B15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDACCDA7-D2DB-4B51-93E7-2CEB0F8C0DF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDACCDA7-D2DB-4B51-93E7-2CEB0F8C0DF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDACCDA7-D2DB-4B51-93E7-2CEB0F8C0DF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDACCDA7-D2DB-4B51-93E7-2CEB0F8C0DF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

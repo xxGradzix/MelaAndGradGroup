@@ -3,9 +3,7 @@ using MelaAndGradGroup.onlineShopProgram.services;
 using Moq;
 using Xunit;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Assert = Xunit.Assert;
 
 public class ProductControllerTests
 {

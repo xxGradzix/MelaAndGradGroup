@@ -12,6 +12,12 @@
     &lt;TestId&gt;xUnit::280BB9B6-FD84-4D9E-A2E7-D6396AD61B15::net8.0::ProductControllerTests&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=54b6aa4a_002D94b9_002D4398_002Dbc98_002Df39c2e983f5f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Tests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::CDACCDA7-D2DB-4B51-93E7-2CEB0F8C0DF8::net8.0::ProductServiceTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::CDACCDA7-D2DB-4B51-93E7-2CEB0F8C0DF8::net8.0::ProductControllerTests&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
 	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=63097293_002D97e2_002D4216_002Da9f0_002D8acd0079dc76/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Test1 #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;

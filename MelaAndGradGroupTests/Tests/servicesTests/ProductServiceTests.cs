@@ -3,6 +3,7 @@ using MelaAndGradGroup.onlineShopProgram.repositories;
 using Moq;
 using Xunit;
 using System.Threading.Tasks;
+using Assert = Xunit.Assert;
 
 public class ProductServiceTests
 {
