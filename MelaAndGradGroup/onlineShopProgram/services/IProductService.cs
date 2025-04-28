@@ -13,6 +13,6 @@ public interface IProductService
 
     public Task<Product> UpdateProductById(int id, ProductDTO productDTO);
 
-    //public Task<Product> SellProduct(int productId, int quantity);
+    public Task<Product> SellProduct(int productId, int quantity);
 
 }

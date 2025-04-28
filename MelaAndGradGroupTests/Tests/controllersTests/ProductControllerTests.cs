@@ -4,6 +4,7 @@ using Moq;
 using Xunit;
 using Microsoft.AspNetCore.Mvc;
 using Assert = Xunit.Assert;
+using MelaAndGradGroup.onlineShopProgram.entities;
 
 public class ProductControllerTests
 {
@@ -75,5 +76,29 @@ public class ProductControllerTests
         // Assert
         var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
         Assert.Equal(nameof(_productController.GetProductById), createdAtActionResult.ActionName);
+    }
+
+    [Fact]
+    public async Task SellProduct_ShouldReturnOkWithUpdatedProduct()
+    {
+        // Arrange
+        var productId = 1;
+        var quantity = 2;
+        var product = new Product("Test", 10, 10, "Description") { id = productId };
+        var updatedProduct = new Product("Test", 10, 8, "Description") { id = productId };
+
+        // Setup mock for SellProduct
+        _productServiceMock.Setup(s => s.SellProduct(productId, quantity)).ReturnsAsync(updatedProduct);
+
+        var request = new SellProductRequest { id = productId, quantity = quantity };
+
+        // Act
+        var result = await _productController.SellProduct(request);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnValue = Assert.IsType<Product>(okResult.Value);
+        Assert.Equal(updatedProduct.id, returnValue.id);
+        Assert.Equal(updatedProduct.quantity, returnValue.quantity);
     }
 }

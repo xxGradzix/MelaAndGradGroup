@@ -1,3 +1,4 @@
+using MelaAndGradGroup.onlineShopProgram.entities;
 using MelaAndGradGroup.onlineShopProgram.services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -75,23 +76,20 @@ public class ProductController : ControllerBase
         }
     }
 
-    //[HttpPost("sell")]
-    //public async Task<IActionResult> SellProduct([FromBody] dynamic request)
-    //{
-    //    try
-    //    {
-    //        var productId = Convert.ToInt32(request.id);
-    //        var quantity = Convert.ToInt32(request.quantity);
+    [HttpPost("sell")]
+    public async Task<IActionResult> SellProduct([FromBody] SellProductRequest request)
+    {
+        try
+        {
+            var updatedProduct = await productService.SellProduct(request.id, request.quantity);
 
-    //        var updatedProduct = await productService.SellProduct(productId, quantity);
-
-    //        return Ok(updatedProduct);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return BadRequest(ex.Message);
-    //    }
-    //}
+            return Ok(updatedProduct);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
     //get all products
     //get all products by name
