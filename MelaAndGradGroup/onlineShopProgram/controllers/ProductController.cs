@@ -75,4 +75,29 @@ public class ProductController : ControllerBase
         }
     }
 
+    //[HttpPost("sell")]
+    //public async Task<IActionResult> SellProduct([FromBody] dynamic request)
+    //{
+    //    try
+    //    {
+    //        var productId = Convert.ToInt32(request.id);
+    //        var quantity = Convert.ToInt32(request.quantity);
+
+    //        var updatedProduct = await productService.SellProduct(productId, quantity);
+
+    //        return Ok(updatedProduct);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return BadRequest(ex.Message);
+    //    }
+    //}
+
+    //get all products
+    //get all products by name
+    //get all products by id
+    //get all products by price
+    //get all products by quantity
+
+
 }

@@ -8,12 +8,14 @@ using Assert = Xunit.Assert;
 public class ProductServiceTests
 {
     private readonly Mock<IProductRepository> _repositoryMock;
+    private readonly Mock<IProductEventRepository> _eventRepositoryMock;
     private readonly ProductService _productService;
 
     public ProductServiceTests()
     {
         _repositoryMock = new Mock<IProductRepository>();
-        _productService = new ProductService(_repositoryMock.Object);
+        _eventRepositoryMock = new Mock<IProductEventRepository>();
+        _productService = new ProductService(_repositoryMock.Object, _eventRepositoryMock.Object);
     }
 
     [Fact]
