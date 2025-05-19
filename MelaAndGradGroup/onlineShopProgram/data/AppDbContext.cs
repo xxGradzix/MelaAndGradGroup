@@ -14,7 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<User> Users { get; set; }
 
     private readonly IConfiguration _configuration;
-    
+    // dependency, data generation
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
