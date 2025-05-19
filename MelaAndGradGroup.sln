@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTest", "DataTest\DataTest.csproj", "{8D195913-13C8-44DC-94D9-4829198171EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Logic\Logic.csproj", "{8C823C04-518D-7F5D-DC1B-2C502C583C95}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,5 +40,15 @@ Global
 		{83091235-049B-458C-A8C5-A91ADA34737D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83091235-049B-458C-A8C5-A91ADA34737D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83091235-049B-458C-A8C5-A91ADA34737D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C823C04-518D-7F5D-DC1B-2C502C583C95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C823C04-518D-7F5D-DC1B-2C502C583C95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C823C04-518D-7F5D-DC1B-2C502C583C95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C823C04-518D-7F5D-DC1B-2C502C583C95}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0EC1C215-07B3-425C-AA3F-CFA2D8552A37}
 	EndGlobalSection
 EndGlobal

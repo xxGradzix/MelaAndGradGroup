@@ -2,6 +2,6 @@
 {
     public interface IUserFactory
     {
-        IUser CreateReader(string name, string surname, string email, string phoneNumber);
+        IUser CreateUser(string name, string surname, string email, string phoneNumber);
     }
 }

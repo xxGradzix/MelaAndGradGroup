@@ -23,7 +23,7 @@ namespace DataTest.TestDataGenerator
             IProduct product = new Product("name1", 12, 100, "description1");
             _data.AddProduct(product);
 
-            IUser customer = new Customer("Customer", "customer@mail.com", "123456789");
+            IUser customer = new Customer("Customer", "customer@mail.com", "password", "123456789");
             _data.AddUser(customer);
         }
     }

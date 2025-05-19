@@ -5,6 +5,7 @@ namespace Data.API.Entities
     {
         Guid id { get; }
         string username { get; set; }
+        string password { get; set; }
         string email { get; set; }
         string phoneNumber { get; set; }
         Role role { get; set; }

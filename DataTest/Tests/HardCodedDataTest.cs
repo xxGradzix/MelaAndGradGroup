@@ -16,7 +16,7 @@ namespace DataTest.Tests
         [Test]
         public void TestStaticProduct()
         {
-            Assert.AreEqual(1, _data.getProducts().Count, "Incorrect number of books");
+            Assert.AreEqual(1, _data.getProducts().Count, "Incorrect number of products");
         }
 
         [Test]

@@ -15,7 +15,7 @@ namespace DataTest.Tests
         [Test]
         public void TestGeneratedProdcuts()
         {
-            Assert.IsTrue(_data.getProducts().Count > 0, "No books generated");
+            Assert.IsTrue(_data.getProducts().Count > 0, "No products generated");
         }
 
         [SetUp]
