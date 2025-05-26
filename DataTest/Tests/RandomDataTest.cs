@@ -1,27 +1,43 @@
-﻿using DataTest.TestDataGeneration;
+﻿using Data.dataContextImpl.database;
+using DataTest.TestDataGeneration;
 using DataTest.TestDataGenerator;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace DataTest.Tests
 {
-    public class RandomDataTest : DataTest
+    public class RandomDataTest
     {
+        private AppDbContext _context;
+
         [SetUp]
-        public override void Initialize()
+        public void Initialize()
         {
-            IDataGenerator generator = new RandomDataGenerator();
-            _data = generator.GetData();
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseInMemoryDatabase(databaseName: "TestDb")
+                .Options;
+            _context = new AppDbContext(options);
+
+            var generator = new RandomDataGenerator(_context);
+            generator.Generate();
+        }
+        
+        [TearDown]
+        public void Cleanup()
+        {
+            _context?.Dispose();
         }
 
         [Test]
-        public void TestGeneratedProdcuts()
+        public void TestGeneratedProducts()
         {
-            Assert.IsTrue(_data.getProducts().Count > 0, "No products generated");
+            Assert.IsTrue(_context.Products.Count() > 0, "No products generated");
         }
 
-        [SetUp]
+        [Test]
         public void TestGeneratedUsers()
         {
-            Assert.IsTrue(_data.GetUsers().Count > 0, "No users generated");
+            Assert.IsTrue(_context.Users.Count() > 0, "No users generated");
         }
     }
 }

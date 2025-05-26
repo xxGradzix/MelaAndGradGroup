@@ -1,13 +1,10 @@
-using System.Security.AccessControl;
 using Logic.Services;
 using Data.Repositories.Interfaces;
 using Logic.Services.Interfaces;
 using Data.API.Entities;
 using Data.Catalog;
-using Data.dataContextImpl.database;
 using Data.Enums;
 using Data.Events;
-using Data.Repositories;
 using Data.Users;
 
 namespace LogicTest.ServicesTest
@@ -213,7 +210,6 @@ namespace LogicTest.ServicesTest
         }
 
         [Test]
-        //[ExpectedException(typeof(InvalidOperationException))]
         public void SellProduct_ItemNotFound()
         {
             var service = CreateService(out var users, out _, out _);
@@ -226,7 +222,6 @@ namespace LogicTest.ServicesTest
         }
 
         [Test]
-        //[ExpectedException(typeof(InvalidOperationException))]
         public void SellProduct_NotEnoughtProducts()
         {
             var service = CreateService(out var users, out var items, out _);
@@ -235,7 +230,6 @@ namespace LogicTest.ServicesTest
             users.Save(new FakeUser { });
             items.Save(new FakeProduct { id = proId, name = "example", quantity = 1 });
 
-            //service.SellProduct(userId, proId, 2);
             Assert.Throws<InvalidOperationException>(() => service.SellProduct(userId, proId, 2));
         }
 
@@ -253,14 +247,12 @@ namespace LogicTest.ServicesTest
         }
 
         [Test]
-        //[ExpectedException(typeof(InvalidOperationException))]
         public void AddProduct_Duplicate()
         {
             var service = CreateService(out _, out var repo, out _);
             var product = new FakeProduct { id = Guid.NewGuid(), name = "Duplicate", quantity = 1 };
             repo.Save(product);
 
-            //service.AddProduct(product);
             Assert.Throws<InvalidOperationException>(() => service.AddProduct(product));
         }
 
@@ -301,7 +293,6 @@ namespace LogicTest.ServicesTest
         }
 
         [Test]
-        //[ExpectedException(typeof(InvalidOperationException))]
         public void FindById_ProductNotFound()
         {
             var service = CreateService(out _, out _, out _);
@@ -326,11 +317,9 @@ namespace LogicTest.ServicesTest
         }
 
         [Test]
-        //[ExpectedException(typeof(InvalidOperationException))]
         public void FindAll_EmptyList()
         {
             var service = CreateService(out _, out _, out _);
-            //service.FindAll();
             Assert.Throws<InvalidOperationException>(() => service.FindAll());
         }
     }

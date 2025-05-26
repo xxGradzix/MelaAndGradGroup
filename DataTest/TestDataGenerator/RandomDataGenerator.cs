@@ -1,7 +1,7 @@
 ﻿using Data.API;
 using Data.API.Entities;
 using Data.Catalog;
-using Data.Implementations;
+using Data.dataContextImpl.database;
 using Data.Users;
 using DataTest.TestDataGenerator;
 
@@ -9,17 +9,20 @@ namespace DataTest.TestDataGeneration
 {
     internal class RandomDataGenerator : IDataGenerator
     {
-        private readonly IData _data;
+        private readonly AppDbContext _context;
         private readonly Random _random = new();
 
-        public RandomDataGenerator()
+        public RandomDataGenerator(AppDbContext context)
         {
-            _data = new InMemoryDataContext();
-            GenerateProducts();
-            GenerateUsers();
+            _context = context;
         }
 
-        public IData GetData() => _data;
+        public void Generate()
+        {
+            GenerateProducts();
+            GenerateUsers();
+            _context.SaveChanges();
+        }
 
         private void GenerateProducts()
         {
@@ -30,15 +33,13 @@ namespace DataTest.TestDataGeneration
 
             for (int i = 0; i < 10; i++)
             {
-                IProduct product = new Product(
+                var product = new Product(
                     name: names[_random.Next(names.Length)],
                     price: prices[_random.Next(prices.Length)],
                     quantity: quantity[_random.Next(quantity.Length)],
                     description: descriptions[_random.Next(descriptions.Length)]
                 );
-    
-                
-                _data.AddProduct(product);
+                _context.Products.Add(product);
             }
         }
 
@@ -51,15 +52,14 @@ namespace DataTest.TestDataGeneration
 
             for (int i = 0; i < 5; i++)
             {
-                string name = names[_random.Next(names.Length)];
-                string password = passwords[_random.Next(passwords.Length)];
-                string email = mails[_random.Next(mails.Length)];
-                string phone = phones[_random.Next(phones.Length)];
-                
-                User reader = new Customer(name, email, password, phone);
-                _data.AddUser(reader);
+                var user = new Customer(
+                    names[_random.Next(names.Length)],
+                    mails[_random.Next(mails.Length)],
+                    passwords[_random.Next(passwords.Length)],
+                    phones[_random.Next(phones.Length)]
+                );
+                _context.Users.Add(user);
             }
         }
-
     }
 }

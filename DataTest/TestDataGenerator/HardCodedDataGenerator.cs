@@ -1,30 +1,29 @@
-﻿using Data.API;
+using Data.API;
 using Data.API.Entities;
 using Data.Catalog;
+using Data.dataContextImpl.database;
 using Data.Users;
-using Data.Implementations;
 
 namespace DataTest.TestDataGenerator
 {
     internal class HardcodedDataGenerator : IDataGenerator
     {
-        private readonly IData _data;
+        private readonly AppDbContext _context;
 
-        public HardcodedDataGenerator()
+        public HardcodedDataGenerator(AppDbContext context)
         {
-            _data = new InMemoryDataContext();
-            AddStaticData();
+            _context = context;
         }
 
-        public IData GetData() => _data;
-
-        private void AddStaticData()
+        public void Generate()
         {
-            IProduct product = new Product("name1", 12, 100, "description1");
-            _data.AddProduct(product);
+            var product = new Product("name1", 12, 100, "description1");
+            _context.Products.Add(product);
 
-            IUser customer = new Customer("Customer", "customer@mail.com", "password", "123456789");
-            _data.AddUser(customer);
+            var customer = new Customer("Customer", "customer@mail.com", "password", "123456789");
+            _context.Users.Add(customer);
+
+            _context.SaveChanges();
         }
     }
 }

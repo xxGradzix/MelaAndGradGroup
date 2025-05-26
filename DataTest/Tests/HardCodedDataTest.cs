@@ -1,28 +1,30 @@
-﻿using DataTest.TestDataGenerator;
+﻿// DataTest/Tests/HardCodedDataTest.cs
+
+using Data.Catalog;
+using Data.dataContextImpl.database;
+using Data.Users;
+using DataTest.TestDataGenerator;
 
 namespace DataTest.Tests
 {
-    
-    
-    public class HardcodedDataTest : DataTest
+    internal class HardcodedDataGenerator : IDataGenerator
     {
-        [SetUp]
-        public override void Initialize()
+        private readonly AppDbContext _context;
+
+        public HardcodedDataGenerator(AppDbContext context)
         {
-            IDataGenerator generator = new HardcodedDataGenerator();
-            _data = generator.GetData();
+            _context = context;
         }
 
-        [Test]
-        public void TestStaticProduct()
+        public void Generate()
         {
-            Assert.AreEqual(1, _data.getProducts().Count, "Incorrect number of products");
-        }
+            var product = new Product("name1", 12, 100, "description1");
+            _context.Products.Add(product);
 
-        [Test]
-        public void TestStaticUser()
-        {
-            Assert.AreEqual(1, _data.GetUsers().Count, "Incorrect number of users");
+            var customer = new Customer("Customer", "customer@mail.com", "password", "123456789");
+            _context.Users.Add(customer);
+
+            _context.SaveChanges();
         }
     }
 }
