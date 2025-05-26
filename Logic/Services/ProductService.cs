@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Data.API.Entities;
-using Logic.Repositories;
+﻿using Data.API.Entities;
 using Logic.Repositories.Interfaces;
-using Logic.Services;
 using Logic.Services.Interfaces;
 
 namespace Logic.Services
@@ -75,6 +71,8 @@ namespace Logic.Services
 
         public IProduct SellProduct(Guid productId, Guid userId, int quantity)
         {
+            // Console.WriteLine($"GetUser called with id: {userId}");
+
             var user = userRepository.GetUser(userId);
             if (user == null)
                 throw new InvalidOperationException("Error, user does not exist.");

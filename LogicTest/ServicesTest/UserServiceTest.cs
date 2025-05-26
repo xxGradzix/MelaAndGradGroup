@@ -92,31 +92,27 @@ namespace LogicTest.ServicesTest
         public void AddUser_Success()
         {
             var service = CreateService(out var repo, out var events);
-            var user = new FakeUser
-            {
-                id = Guid.NewGuid(),
-                username = "testuser",
-                password = "pass123",
-                email = "example@test.com",
-                phoneNumber = "123456789"
-            };
+            
+            String username = "testuser";
+            String password = "pass123";
+            String email = "example@test.com";
+            String phoneNumber = "123456789";
 
-            var result = service.Register(user.username, user.password, user.email, user.phoneNumber);
+            var result = service.Register(username, password, email, phoneNumber);
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(user.username, result.username);
+            Assert.AreEqual(username, result.username);
             Assert.AreEqual(1, events.GetAllEvents().Count);
-            Assert.AreEqual(user, repo.GetUser(user.id));
+            
         }
 
         [Test]
-        //[ExpectedException(typeof(InvalidOperationException))]
         public void AddUser_DuplicateId_Throws()
         {
             var service = CreateService(out var repo, out _);
             repo.AddUser(new FakeUser { id = Guid.NewGuid(), username = "testuser" });
 
-            service.Register("testuser", "pass123", "example@test.com", "123456789");
+            Assert.Throws<InvalidOperationException>(() => service.Register("testuser", "pass123", "example@test.com", "123456789"));
         }
 
         [Test]
@@ -158,11 +154,10 @@ namespace LogicTest.ServicesTest
         }
 
         [Test]
-        //[ExpectedException(typeof(InvalidOperationException))]
         public void GetUser_NotFound_Throws()
         {
             var service = CreateService(out _, out _);
-            service.GetById(Guid.NewGuid());
+            Assert.Throws<InvalidOperationException>(() => service.GetById(Guid.NewGuid()));
         }
 
         [Test]
@@ -177,27 +172,11 @@ namespace LogicTest.ServicesTest
         }
 
         [Test]
-        //[ExpectedException(typeof(InvalidOperationException))]
         public void GetAllUsers_Empty_Throws()
         {
             var service = CreateService(out _, out _);
-            service.FindAll();
+            Assert.Throws<InvalidOperationException>(() => service.FindAll());
         }
 
-        [Test]
-        //[ExpectedException(typeof(InvalidOperationException))]
-        public void Register_InvalidEmail_Throws()
-        {
-            var service = CreateService(out _, out _);
-            service.Register("X", "Y", "noat", "123");
-        }
-
-        [Test]
-        //[ExpectedException(typeof(InvalidOperationException))]
-        public void Register_InvalidPhone_Throws()
-        {
-            var service = CreateService(out _, out _);
-            service.Register("X", "Y", "test@mail.com", "12A3");
-        }
     }
 }

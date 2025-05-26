@@ -52,24 +52,25 @@ namespace Logic.Services
 
         public IUser Register(string username, string password, string email, string phonenumber)
         {
-            try
-            {
+            // try
+            // {
                 var user = userRepository.GetAllUsers().FirstOrDefault(u => u.username == username);
+                
                 if (user != null)
                 {
                     throw new InvalidOperationException("Error, User iwth this username already exists.");
                 }
 
-                userFactory.CreateUser(username, password, email, phonenumber);
+                user = userFactory.CreateUser(username, password, email, phonenumber);
                 userRepository.AddUser(user);
                 eventService.AddEvent(eventFactory.CreateUserAddedEvent(user.id, user.username));
                 return user;
-            }
-            catch (InvalidOperationException e)
-            {
-                Console.WriteLine($"{e.Message}");
-                return null;
-            }
+            // }
+            // catch (InvalidOperationException e)
+            // {
+                // Console.WriteLine($"{e.Message}");
+                // return null;
+            // }
         }
 
         public bool Login(string username, string password)

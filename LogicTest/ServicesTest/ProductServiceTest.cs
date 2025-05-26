@@ -1,4 +1,5 @@
-﻿using Logic.Services;
+﻿using System.Security.AccessControl;
+using Logic.Services;
 using Logic.Repositories.Interfaces;
 using Logic.Services.Interfaces;
 using Data.API.Entities;
@@ -39,7 +40,10 @@ namespace LogicTest.ServicesTest
 
             public void AddUser(IUser user) => users[user.id] = user;
 
-            public IUser? GetUser(Guid id) => users.TryGetValue(id, out var u) ? u : null;
+            public IUser? GetUser(Guid id)
+            {
+                return users.TryGetValue(id, out var u) ? u : null;
+            }
 
             public List<IUser> GetAllUsers() => new(users.Values);
 
@@ -91,13 +95,13 @@ namespace LogicTest.ServicesTest
             public IEvent CreateSellProductEvent(Guid userId, Guid itemId, int quantity) => new FakeEvent();
         }
 
-        private ProductService CreateService(out FakeUserRepo userRepo, out FakeProductRepo proRepo, out FakeEventService eventSvc)
+        private ProductService CreateService(out FakeUserRepo userRepo, out FakeProductRepo productRepo, out FakeEventService eventService)
         {
             userRepo = new FakeUserRepo();
-            proRepo = new FakeProductRepo();
-            eventSvc = new FakeEventService();
+            productRepo = new FakeProductRepo();
+            eventService = new FakeEventService();
 
-            return new ProductService(userRepo, proRepo, eventSvc, new FakeEventFactory());
+            return new ProductService(userRepo, productRepo, eventService, new FakeEventFactory());
         }
 
         [Test]
@@ -107,15 +111,20 @@ namespace LogicTest.ServicesTest
             var userId = Guid.NewGuid();
             var proId = Guid.NewGuid();
             users.AddUser(new FakeUser { id = userId });
+
+            
             items.SaveProduct(new FakeProduct { id = proId, name = "example", quantity = 1 });
 
-            var result = service.SellProduct(userId, proId, 1);
+            var result = service.SellProduct(proId, userId, 1);
 
-            Assert.IsNotNull(result);
-            //Assert.AreEqual(proId, result.id);
-            //Assert.AreEqual(0, result.quantity);
-            //Assert.AreEqual(1, events.Events.Count);
+             Console.WriteLine(result);
+            
+             Assert.IsNotNull(result);
+            Assert.AreEqual(proId, result.id);
+            Assert.AreEqual(0, result.quantity);
+            Assert.AreEqual(1, events.Events.Count);
         }
+        
 
         [Test]
         public void SellProduct_UserNotFound()
