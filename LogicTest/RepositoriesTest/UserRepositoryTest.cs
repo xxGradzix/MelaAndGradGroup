@@ -1,31 +1,51 @@
-﻿using Logic.Repositories;
-using Logic.Repositories.Interfaces;
-using Data.API.Entities;
+﻿using Data.Repositories;
+using Data.Repositories.Interfaces;
+using Data.dataContextImpl.database;
 using Data.Enums;
+using Data.Users;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace LogicTest.RepositoriesTest
 {
     public class UserRepositoryTest
     {
-        private class FakeUser : IUser
+        private DbContextOptions<AppDbContext> GetInMemoryOptions()
         {
-            public Guid id { get; set; }
-            public string username { get; set; } = "";
-            public string password { get; set; } = "";
-            public string email { get; set; } = "";
-            public string phoneNumber { get; set; } = "";
-            public Role role { get; set; } = Role.USER;
+            return new DbContextOptionsBuilder<AppDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+        }
+
+        private UserRepository GetRepo()
+        {
+            var options = GetInMemoryOptions();
+            var context = new AppDbContext(options);
+            return new UserRepository(context);
+        }
+        
+        private class FakeUser : User
+        {
+            
+            public FakeUser() : base("username", "email", "password", "phoneNumber", Role.USER)
+            {
+                this.username = username;
+                this.password = password;
+                this.email = email;
+                this.phoneNumber = phoneNumber;
+                this.role = role;
+            }
+
         }
 
         [Test]
         public void AddUser_ShouldStoreUser()
         {
-            IUserRepository repo = new UserRepository();
-            var user = new FakeUser { id = Guid.NewGuid(), email = "example @email.com" };
+            UserRepository repo = GetRepo();
+            var user = new FakeUser { email = "example @email.com" };
 
-            repo.AddUser(user);
-            var result = repo.GetUser(user.id);
+            repo.Save(user);
+            var result = repo.FindByID(user.id);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(user.id, result!.id);
@@ -34,22 +54,22 @@ namespace LogicTest.RepositoriesTest
         [Test]
         public void GetUser_NotFound_ReturnsNull()
         {
-            IUserRepository repo = new UserRepository();
-            var result = repo.GetUser(Guid.NewGuid());
+            IUserRepository repo = GetRepo();
+            var result = repo.FindByID(Guid.NewGuid());
             Assert.IsNull(result);
         }
 
         [Test]
         public void GetAllUsers_ReturnsAllUsers()
         {
-            IUserRepository repo = new UserRepository();
-            var user1 = new FakeUser { id = Guid.NewGuid() };
-            var user2 = new FakeUser { id = Guid.NewGuid() };
+            IUserRepository repo = GetRepo();
+            var user1 = new FakeUser {  };
+            var user2 = new FakeUser {  };
 
-            repo.AddUser(user1);
-            repo.AddUser(user2);
+            repo.Save(user1);
+            repo.Save(user2);
 
-            var result = repo.GetAllUsers();
+            var result = repo.FindAll();
 
             Assert.AreEqual(2, result.Count);
             Assert.IsTrue(result.Exists(u => u.id == user1.id));
@@ -59,21 +79,21 @@ namespace LogicTest.RepositoriesTest
         [Test]
         public void RemoveUser_ExistingUser_ReturnsTrue()
         {
-            IUserRepository repo = new UserRepository();
-            var user = new FakeUser { id = Guid.NewGuid() };
-            repo.AddUser(user);
+            IUserRepository repo = GetRepo();
+            var user = new FakeUser { };
+            repo.Save(user);
 
-            var result = repo.RemoveUser(user.id);
+            var result = repo.Delete(user.id);
 
             Assert.IsTrue(result);
-            Assert.IsNull(repo.GetUser(user.id));
+            Assert.IsNull(repo.FindByID(user.id));
         }
 
         [Test]
         public void RemoveUser_NonExisting_ReturnsFalse()
         {
-            IUserRepository repo = new UserRepository();
-            var result = repo.RemoveUser(Guid.NewGuid());
+            IUserRepository repo = GetRepo();
+            var result = repo.Delete(Guid.NewGuid());
 
             Assert.IsFalse(result);
         }

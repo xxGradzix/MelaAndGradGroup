@@ -1,46 +1,43 @@
-﻿using Logic.Repositories;
+﻿using Data.Repositories;
 using Data.API;
 using Data.API.Entities;
+using Data.dataContextImpl.database;
+using Data.Events;
+using Microsoft.EntityFrameworkCore;
 
 namespace LogicTest.RepositoriesTest
 {
     
     public class EventRepositoryTest
     {
-        private class FakeEvent : IEvent
+        
+        private class FakeEvent : Event
         {
-            public Guid eventId { get; } = Guid.NewGuid();
-            public DateTime timestamp { get; set; } = DateTime.Now;
+        }
+        
+        private DbContextOptions<AppDbContext> GetInMemoryOptions()
+        {
+            return new DbContextOptionsBuilder<AppDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
         }
 
-        private class FakeDataContext : IData
+        private EventRepository GetRepo()
         {
-            private readonly List<IEvent> events = new();
-
-            public void AddEvent(IEvent productEvent) => events.Add(productEvent);
-
-            public List<IEvent> GetEvents() => new(events);
-
-            public IUser? GetUser(Guid id) => null;
-            public List<IUser> GetUsers() => new();
-            public void AddUser(IUser user) { }
-            public bool DeleteUser(Guid id) => false;
-
-            public IProduct? getProduct(Guid id) => null;
-            public List<IProduct> getProducts() => new();
-            public void AddProduct(IProduct item) { }
-            public bool DeleteProduct(Guid id) => false;
+            var options = GetInMemoryOptions();
+            var context = new AppDbContext(options);
+            return new EventRepository(context);
         }
-
+        
         [Test]
         public void AddEvent_AddsToDataContext()
         {
-            var data = new FakeDataContext();
-            var repo = new EventRepository(data);
+            var data = GetRepo();
+                                
             var ev = new FakeEvent();
 
-            repo.AddEvent(ev);
-            var allEvents = repo.GetAllEvents();
+            data.Save(ev);
+            var allEvents = data.FindAll();
 
             Assert.AreEqual(1, allEvents.Count);
             Assert.AreEqual(ev.eventId, allEvents[0].eventId);
@@ -49,16 +46,15 @@ namespace LogicTest.RepositoriesTest
         [Test]
         public void GetAllEvents_ReturnsAllAdded()
         {
-            var data = new FakeDataContext();
-            var repo = new EventRepository(data);
+            var data = GetRepo();
 
             var e1 = new FakeEvent();
             var e2 = new FakeEvent();
 
-            repo.AddEvent(e1);
-            repo.AddEvent(e2);
+            data.Save(e1);
+            data.Save(e2);
 
-            var result = repo.GetAllEvents();
+            var result = data.FindAll();
 
             Assert.AreEqual(2, result.Count);
             Assert.IsTrue(result.Exists(e => e.eventId == e1.eventId));

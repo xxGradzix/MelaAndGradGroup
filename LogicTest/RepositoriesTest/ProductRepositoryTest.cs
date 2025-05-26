@@ -1,52 +1,73 @@
-﻿using Logic.Repositories;
-using Logic.Repositories.Interfaces;
-using Data.API.Entities;
+﻿using Data.Repositories;
+using Data.Repositories.Interfaces;
+using Data.Catalog;
+using Data.dataContextImpl.database;
+using Microsoft.EntityFrameworkCore;
 
 namespace LogicTest.RepositoriesTest
 {
     public class ProductRepositoryTest
     {
-        private class FakeProduct : IProduct
+        private DbContextOptions<AppDbContext> GetInMemoryOptions()
         {
-            public Guid id { get; set; }
-            public String name { get; set; } = "";
-            public double price { get; set; } = 0.0;
-            public int quantity { get; set; } = 0;
-            public String description { get; set; } = "";
+            return new DbContextOptionsBuilder<AppDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+        }
+
+        private ProductRepository GetRepo()
+        {
+            var options = GetInMemoryOptions();
+            var context = new AppDbContext(options);
+            return new ProductRepository(context);
+        }
+
+        private class FakeProduct : Product
+        {
+            public FakeProduct(string name, double price, int quantity, string description, Guid id)
+                : base(name, price, quantity, description)
+            {
+                this.id = id;
+            }
+            public FakeProduct()
+                : base("Default", 0.0, 0, "Default Description")
+            {
+                this.id = id;
+            }
         }
 
         [Test]
         public void SaveProduct_ShouldStoreItem()
         {
-            IProductRepository repo = new ProductRepository();
+            ProductRepository repo = GetRepo();
             var item = new FakeProduct { id = Guid.NewGuid(), name = "Example" };
 
-            repo.SaveProduct(item);
-            var stored = repo.GetProduct(item.id);
+            repo.Save(item);
+            var stored = repo.FindByID(item.id);
 
             Assert.IsNotNull(stored);
-            Assert.AreEqual(item.id, stored!.id);
+            Assert.AreEqual(item.id, stored.id);
         }
 
         [Test]
         public void GetProduct_NotFound_ReturnsNull()
         {
-            IProductRepository repo = new ProductRepository();
-            var result = repo.GetProduct(Guid.NewGuid());
+            IProductRepository repo = GetRepo();
+            var result = repo.FindByID(Guid.NewGuid());
             Assert.IsNull(result);
         }
 
         [Test]
         public void GetAllProducts_ReturnsAllItems()
         {
-            IProductRepository repo = new ProductRepository();
+            IProductRepository repo = GetRepo();
             var item1 = new FakeProduct { id = Guid.NewGuid() };
             var item2 = new FakeProduct { id = Guid.NewGuid() };
 
-            repo.SaveProduct(item1);
-            repo.SaveProduct(item2);
+            repo.Save(item1);
+            repo.Save(item2);
 
-            var result = repo.GetAllProducts();
+            var result = repo.FindAll();
 
             Assert.AreEqual(2, result.Count);
             Assert.IsTrue(result.Exists(i => i.id == item1.id));
@@ -56,21 +77,21 @@ namespace LogicTest.RepositoriesTest
         [Test]
         public void RemoveProduct_ExistingItem_ReturnsTrue()
         {
-            IProductRepository repo = new ProductRepository();
+            IProductRepository repo = GetRepo();
             var item = new FakeProduct { id = Guid.NewGuid() };
-            repo.SaveProduct(item);
+            repo.Save(item);
 
-            var result = repo.RemoveProduct(item.id);
+            var result = repo.Delete(item.id);
 
             Assert.IsTrue(result);
-            Assert.IsNull(repo.GetProduct(item.id));
+            Assert.IsFalse(repo.Delete(item.id));
         }
 
         [Test]
         public void RemoveProduct_NonExisting_ReturnsFalse()
         {
-            IProductRepository repo = new ProductRepository();
-            var result = repo.RemoveProduct(Guid.NewGuid());
+            IProductRepository repo = GetRepo();
+            var result = repo.Delete(Guid.NewGuid());
 
             Assert.IsFalse(result);
         }

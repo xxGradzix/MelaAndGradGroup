@@ -3,7 +3,7 @@ using Data.API.Entities;
 
 namespace Data.Catalog
 {
-    internal class Product : IProduct
+    public class Product : IProduct
     {
         public Guid id { get; set; }
 
@@ -19,7 +19,7 @@ namespace Data.Catalog
 
         [StringLength(500)] public String description { get; set; }
 
-        internal Product(String name, double price, int quantity, String description)
+        public Product(String name, double price, int quantity, String description)
         {
             this.id = Guid.NewGuid();
             this.name = name;

@@ -1,5 +1,6 @@
 ﻿using Data.API.Entities;
-using Logic.Repositories.Interfaces;
+using Data.Repositories.Interfaces;
+using Data.Users;
 using Logic.Services.Interfaces;
 
 namespace Logic.Services
@@ -21,18 +22,18 @@ namespace Logic.Services
 
         public bool Remove(Guid id)
         {
-            var user = userRepository.GetUser(id);
+            var user = userRepository.FindByID(id);
             if (user == null)
             {
                 return false;
             }
             eventService.AddEvent(eventFactory.CreateUserRemovedEvent(user.id));
-            return userRepository.RemoveUser(id);
+            return userRepository.Delete(id);
         }
 
         public IUser GetById(Guid id)
         {
-            var user = userRepository.GetUser(id);
+            var user = userRepository.FindByID(id);
             if (user == null)
             {
                 throw new InvalidOperationException("Error, no user with such id.");
@@ -42,35 +43,27 @@ namespace Logic.Services
 
         public List<IUser> FindAll()
         {
-            var users = userRepository.GetAllUsers();
+            var users = userRepository.FindAll();
             if (users.Count == 0)
             {
                 throw new InvalidOperationException("Error, no users found.");
             }
-            return users;
+            return users.Cast<IUser>().ToList();
         }
 
         public IUser Register(string username, string password, string email, string phonenumber)
         {
-            // try
-            // {
-                var user = userRepository.GetAllUsers().FirstOrDefault(u => u.username == username);
-                
-                if (user != null)
-                {
-                    throw new InvalidOperationException("Error, User iwth this username already exists.");
-                }
+            var user = userRepository.FindAll().Cast<IUser>().FirstOrDefault(u => u.username == username);
+            
+            if (user != null)
+            {
+                throw new InvalidOperationException("Error, User iwth this username already exists.");
+            }
 
-                user = userFactory.CreateUser(username, password, email, phonenumber);
-                userRepository.AddUser(user);
-                eventService.AddEvent(eventFactory.CreateUserAddedEvent(user.id, user.username));
-                return user;
-            // }
-            // catch (InvalidOperationException e)
-            // {
-                // Console.WriteLine($"{e.Message}");
-                // return null;
-            // }
+            user = userFactory.CreateUser(username, password, email, phonenumber);
+            userRepository.Save((User)user);
+            eventService.AddEvent(eventFactory.CreateUserAddedEvent(user.id, user.username));
+            return user;
         }
 
         public bool Login(string username, string password)

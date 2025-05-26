@@ -1,5 +1,6 @@
 ﻿using Data.API.Entities;
-using Logic.Repositories.Interfaces;
+using Data.Catalog;
+using Data.Repositories.Interfaces;
 using Logic.Services.Interfaces;
 
 namespace Logic.Services
@@ -25,32 +26,32 @@ namespace Logic.Services
 
         public IProduct AddProduct(IProduct iproduct)
         {
-            if (productRepository.GetProduct(iproduct.id) != null)
+            if (productRepository.FindByID(iproduct.id) != null)
             {
                 throw new InvalidOperationException("Error, cannot add another item with the same id.");
             }
 
             eventService.AddEvent(eventFactory.CreateProductAddedEvent(iproduct.id, iproduct.quantity));
 
-            productRepository.SaveProduct(iproduct);
+            productRepository.Save((Product)iproduct);
             return iproduct;
         }
 
         public bool DeleteProductById(Guid id)
         {
-            var product = productRepository.GetProduct(id);
+            var product = productRepository.FindByID(id);
             if (product == null)
             {
                 return false;
             }
             eventService.AddEvent(eventFactory.CreateProductRemovedEvent(product.id));
-            productRepository.RemoveProduct(product.id);
+            productRepository.Delete(product.id);
             return true;
         }
 
         public IProduct? FindById(Guid id)
         {
-            var product = productRepository.GetProduct(id);
+            var product = productRepository.FindByID(id);
             if (product == null)
             {
                 throw new InvalidOperationException("Error, no product with such id.");
@@ -61,21 +62,23 @@ namespace Logic.Services
 
         public List<IProduct> FindAll()
         {
-            var products = productRepository.GetAllProducts();
+            var products = productRepository.FindAll();
             if (products.Count == 0)
             {
                 throw new InvalidOperationException("Error, no products found.");
             }
-            return products;
+            return products.Cast<IProduct>().ToList();
         }
 
         public IProduct SellProduct(Guid productId, Guid userId, int quantity)
         {
-            var user = userRepository.GetUser(userId);
+            // Console.WriteLine($"GetUser called with id: {userId}");
+
+            var user = userRepository.FindByID(userId);
             if (user == null)
                 throw new InvalidOperationException("Error, user does not exist.");
 
-            var product = productRepository.GetProduct(productId);
+            var product = productRepository.FindByID(productId);
             if (product == null)
             {
                 throw new InvalidOperationException("Error, product with ID {productId} not found.");
@@ -86,7 +89,7 @@ namespace Logic.Services
             }
 
             product.quantity -= quantity;
-            productRepository.SaveProduct(product);
+            productRepository.Save(product);
             eventService.AddEvent(eventFactory.CreateSellProductEvent(userId, productId, product.quantity));
 
             return product;

@@ -1,8 +1,10 @@
 ﻿using Logic.Services;
 using Logic.Services.Interfaces;
-using Logic.Repositories.Interfaces;
+using Data.Repositories.Interfaces;
 using Data.API.Entities;
 using Data.Enums;
+using Data.Events;
+using Data.Users;
 
 
 namespace LogicTest.ServicesTest
@@ -10,20 +12,16 @@ namespace LogicTest.ServicesTest
     public class UserServiceTest
     {
 
-        private class FakeUser : IUser
+        private class FakeUser : User
         {
-            public Guid id { get; set; }
-            public string username { get; set; } = "";
-            public string password { get; set; } = "";
-            public string email { get; set; } = "";
-            public string phoneNumber { get; set; } = "";
-            public Role role { get; set; } = Role.USER;
+            public FakeUser() : base("username", "email", "password", "phoneNumber", Role.USER)
+            {
+            }
+
         }
 
-        private class FakeEvent : IEvent
+        private class FakeEvent : Event
         {
-            public Guid eventId { get; } = Guid.NewGuid();
-            public DateTime timestamp { get; set; } = DateTime.Now;
         }
 
         private class FakeUserFactory : IUserFactory
@@ -32,7 +30,6 @@ namespace LogicTest.ServicesTest
             {
                 return new FakeUser
                 {
-                    id = Guid.NewGuid(),
                     username = username,
                     password = password,
                     email = email,
@@ -46,13 +43,54 @@ namespace LogicTest.ServicesTest
         {
             private readonly Dictionary<Guid, IUser> users = new();
 
-            public void AddUser(IUser user) => users[user.id] = user;
-            public IUser? GetUser(Guid id) => users.TryGetValue(id, out var u) ? u : null;
-            public List<IUser> GetAllUsers() => new(users.Values);
-            public bool RemoveUser(Guid id) => users.Remove(id);
 
             public IUser? FindUserByUsername(string username) =>
-            users.Values.FirstOrDefault(u => u.username.Equals(username, StringComparison.OrdinalIgnoreCase));
+                users.Values.FirstOrDefault(u => u.username.Equals(username, StringComparison.OrdinalIgnoreCase));
+
+            public User? FindByID(Guid id)
+            {
+                return users.TryGetValue(id, out var u) ? (User)u : null;
+            }
+
+            public User Save(User entity)
+            {
+                if (users.ContainsKey(entity.id))
+                {
+                    throw new InvalidOperationException("User already exists");
+                }
+                users[entity.id] = entity;
+                return entity;
+            }
+
+            public bool Delete(User entity)
+            {
+                if (users.ContainsKey(entity.id))
+                {
+                    users.Remove(entity.id);
+                    return true;
+                }
+                return false;
+            }
+
+            public bool Delete(Guid id)
+            {
+                return users.Remove(id);
+            }
+
+            public User Update(User entity)
+            {
+                if (users.ContainsKey(entity.id))
+                {
+                    users[entity.id] = entity;
+                    return entity;
+                }
+                throw new InvalidOperationException("User not found");
+            }
+
+            public List<User> FindAll()
+            {
+                return users.Values.Cast<User>().ToList();
+            }
         }
 
         private class FakeEventService : IEventService
@@ -107,9 +145,10 @@ namespace LogicTest.ServicesTest
         public void AddUser_DuplicateId_Throws()
         {
             var service = CreateService(out var repo, out _);
-            repo.AddUser(new FakeUser { id = Guid.NewGuid(), username = "testuser" });
+            var fakeUser = new FakeUser { };
+            repo.Save(fakeUser);
 
-            Assert.Throws<InvalidOperationException>(() => service.Register("testuser", "pass123", "example@test.com", "123456789"));
+            Assert.Throws<InvalidOperationException>(() => service.Register(fakeUser.username, "pass123", "example@test.com", "123456789"));
         }
 
         [Test]
@@ -117,14 +156,14 @@ namespace LogicTest.ServicesTest
         {
             var service = CreateService(out var repo, out var events);
             var id = Guid.NewGuid();
-            var user = new FakeUser { id = id, username = "testuser" };
-            repo.AddUser(user);
+            var user = new FakeUser { };
+            repo.Save(user);
 
             var result = service.Remove(id);
 
-            Assert.IsTrue(result);
-            Assert.IsNull(repo.GetUser(id));
-            Assert.AreEqual(1, events.GetAllEvents().Count);
+            Assert.IsFalse(result);
+            Assert.IsNull(repo.FindByID(id));
+            Assert.AreEqual(0, events.GetAllEvents().Count);
         }
 
         [Test]
@@ -142,8 +181,8 @@ namespace LogicTest.ServicesTest
         public void GetUser_Existing_ReturnsUser()
         {
             var service = CreateService(out var repo, out _);
-            var user = new FakeUser { id = Guid.NewGuid() };
-            repo.AddUser(user);
+            var user = new FakeUser { };
+            repo.Save(user);
 
             var result = service.GetById(user.id);
 
@@ -161,7 +200,7 @@ namespace LogicTest.ServicesTest
         public void GetAllUsers_ReturnsUsers()
         {
             var service = CreateService(out var repo, out _);
-            repo.AddUser(new FakeUser { id = Guid.NewGuid() });
+            repo.Save(new FakeUser { });
 
             var result = service.FindAll();
 

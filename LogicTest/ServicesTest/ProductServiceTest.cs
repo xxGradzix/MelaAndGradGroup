@@ -1,69 +1,144 @@
-﻿using Logic.Services;
-using Logic.Repositories.Interfaces;
+using System.Security.AccessControl;
+using Logic.Services;
+using Data.Repositories.Interfaces;
 using Logic.Services.Interfaces;
 using Data.API.Entities;
+using Data.Catalog;
+using Data.dataContextImpl.database;
 using Data.Enums;
+using Data.Events;
+using Data.Repositories;
+using Data.Users;
 
 namespace LogicTest.ServicesTest
 {
     public class ProductServiceTest
     {
-        private class FakeUser : IUser
+        private class FakeUser : User
         {
-            public Guid id { get; set; }
-            public string username { get; set; } = "";
-            public string password { get; set; } = "";
-            public string email { get; set; } = "";
-            public string phoneNumber { get; set; } = "";
-            public Role role { get; set; } = Role.USER;
+            public FakeUser() : base("username", "email", "password", "phoneNumber", Role.USER)
+            {
+                this.username = username;
+                this.password = password;
+                this.email = email;
+                this.phoneNumber = phoneNumber;
+                this.role = role;
+            }
+
         }
 
-        private class FakeProduct : IProduct
+        private class FakeProduct : Product
         {
-            public Guid id { get; set; }
-            public String name { get; set; } = "";
-            public double price { get; set; } = 0.0;
-            public int quantity { get; set; } = 0;
-            public String description { get; set; } = "";
+            public FakeProduct() : base("name", 12345, 1223, "description")
+            {
+                this.id = id;
+                this.name = name;
+                this.price = price;
+                this.quantity = quantity;
+                this.description = description;
+            }
+
         }
 
-        private class FakeEvent : IEvent
+        private class FakeEvent : Event
         {
-            public Guid eventId { get; } = Guid.NewGuid();
-            public DateTime timestamp { get; set; } = DateTime.Now;
         }
 
         private class FakeUserRepo : IUserRepository
         {
             private readonly Dictionary<Guid, IUser> users = new();
 
-            public void AddUser(IUser user) => users[user.id] = user;
-
-            public IUser? GetUser(Guid id)
-            {
-                return users.TryGetValue(id, out var u) ? u : null;
-            }
-
-            public List<IUser> GetAllUsers() => new(users.Values);
-
-            public bool RemoveUser(Guid id) => users.Remove(id);
 
             public IUser? FindUserByUsername(string username) =>
                 users.Values.FirstOrDefault(u => u.username.Equals(username, StringComparison.OrdinalIgnoreCase));
+
+            public User? FindByID(Guid id)
+            {
+                return users.TryGetValue(id, out var u) ? (User)u : null;
+            }
+
+            public User Save(User entity)
+            {
+                if (users.ContainsKey(entity.id))
+                {
+                    throw new InvalidOperationException("User already exists");
+                }
+                users[entity.id] = entity;
+                return entity;
+            }
+
+            public bool Delete(User entity)
+            {
+                if (users.ContainsKey(entity.id))
+                {
+                    users.Remove(entity.id);
+                    return true;
+                }
+                return false;
+            }
+
+            public bool Delete(Guid id)
+            {
+                return users.Remove(id);
+            }
+
+            public User Update(User entity)
+            {
+                if (users.ContainsKey(entity.id))
+                {
+                    users[entity.id] = entity;
+                    return entity;
+                }
+                throw new InvalidOperationException("User not found");
+            }
+
+            public List<User> FindAll()
+            {
+                return users.Values.Cast<User>().ToList();
+            }
         }
 
 
         private class FakeProductRepo : IProductRepository
         {
-            private readonly Dictionary<Guid, IProduct> items = new();
+            private readonly Dictionary<Guid, Product> items = new();
 
-            public void SaveProduct(IProduct content) => items[content.id] = content;
+            public Product FindByID(Guid id)
+            {
+                return items.TryGetValue(id, out var item) ? item : null;
+            }
 
-            public bool RemoveProduct(Guid id) => items.Remove(id);
+            public Product Save(Product entity)
+            {
+                items[entity.id] = entity;
+                return entity;
+            }
 
-            public IProduct? GetProduct(Guid id) => items.TryGetValue(id, out var item) ? item : null;
+            public bool Delete(Product entity)
+            {
+                items.Remove(entity.id);
+                return true;
+            }
 
-            public List<IProduct> GetAllProducts() => new(items.Values);
+            public bool Delete(Guid id)
+            {
+                return items.Remove(id);
+            }
+
+            public Product Update(Product entity)
+            {
+                if (items.ContainsKey(entity.id))
+                {
+                    items[entity.id] = entity;
+                    return entity;
+                }
+                throw new InvalidOperationException("Product not found");
+            }
+
+            public List<Product> FindAll()
+            {
+                return new List<Product>(items.Values);
+            }
         }
 
 
@@ -107,14 +182,15 @@ namespace LogicTest.ServicesTest
         public void SellProduct_Success()
         {
             var service = CreateService(out var users, out var items, out var events);
-            var userId = Guid.NewGuid();
+
+            var fakeUser = new FakeUser { };
             var proId = Guid.NewGuid();
-            users.AddUser(new FakeUser { id = userId });
+            users.Save(fakeUser);
 
             
-            items.SaveProduct(new FakeProduct { id = proId, name = "example", quantity = 1 });
+            items.Save(new FakeProduct { id = proId, name = "example", quantity = 1 });
 
-            var result = service.SellProduct(proId, userId, 1);
+            var result = service.SellProduct(proId, fakeUser.id, 1);
 
              Console.WriteLine(result);
             
@@ -137,25 +213,29 @@ namespace LogicTest.ServicesTest
         }
 
         [Test]
+        //[ExpectedException(typeof(InvalidOperationException))]
         public void SellProduct_ItemNotFound()
         {
             var service = CreateService(out var users, out _, out _);
             var userId = Guid.NewGuid();
             var itemId = Guid.NewGuid();
-            users.AddUser(new FakeUser { id = userId });
+            users.Save(new FakeUser {  });
 
+            //service.SellProduct(userId, itemId, 1);
             Assert.Throws<InvalidOperationException>(() => service.SellProduct(userId, itemId, 1));
         }
 
         [Test]
+        //[ExpectedException(typeof(InvalidOperationException))]
         public void SellProduct_NotEnoughtProducts()
         {
             var service = CreateService(out var users, out var items, out _);
             var userId = Guid.NewGuid();
             var proId = Guid.NewGuid();
-            users.AddUser(new FakeUser { id = userId });
-            items.SaveProduct(new FakeProduct { id = proId, name = "example", quantity = 1 });
+            users.Save(new FakeUser { });
+            items.Save(new FakeProduct { id = proId, name = "example", quantity = 1 });
 
+            //service.SellProduct(userId, proId, 2);
             Assert.Throws<InvalidOperationException>(() => service.SellProduct(userId, proId, 2));
         }
 
@@ -168,17 +248,19 @@ namespace LogicTest.ServicesTest
             var result = service.AddProduct(product);
 
             Assert.AreEqual(product, result);
-            Assert.AreEqual(product, repo.GetProduct(product.id));
+            Assert.AreEqual(product, repo.FindByID(product.id));
             Assert.AreEqual(1, events.GetAllEvents().Count);
         }
 
         [Test]
+        //[ExpectedException(typeof(InvalidOperationException))]
         public void AddProduct_Duplicate()
         {
             var service = CreateService(out _, out var repo, out _);
             var product = new FakeProduct { id = Guid.NewGuid(), name = "Duplicate", quantity = 1 };
-            repo.SaveProduct(product);
+            repo.Save(product);
 
+            //service.AddProduct(product);
             Assert.Throws<InvalidOperationException>(() => service.AddProduct(product));
         }
 
@@ -187,12 +269,12 @@ namespace LogicTest.ServicesTest
         {
             var service = CreateService(out _, out var repo, out var events);
             var product = new FakeProduct { id = Guid.NewGuid(), name = "DeleteMe", quantity = 1 };
-            repo.SaveProduct(product);
+            repo.Save(product);
 
             var result = service.DeleteProductById(product.id);
 
             Assert.IsTrue(result);
-            Assert.IsNull(repo.GetProduct(product.id));
+            Assert.IsNull(repo.FindByID(product.id));
             Assert.AreEqual(1, events.GetAllEvents().Count);
         }
 
@@ -211,7 +293,7 @@ namespace LogicTest.ServicesTest
         {
             var service = CreateService(out _, out var repo, out _);
             var product = new FakeProduct { id = Guid.NewGuid(), name = "FindMe", quantity = 1 };
-            repo.SaveProduct(product);
+            repo.Save(product);
 
             var result = service.FindById(product.id);
 
@@ -219,9 +301,11 @@ namespace LogicTest.ServicesTest
         }
 
         [Test]
+        //[ExpectedException(typeof(InvalidOperationException))]
         public void FindById_ProductNotFound()
         {
             var service = CreateService(out _, out _, out _);
+            //service.FindById(Guid.NewGuid());
             Assert.Throws<InvalidOperationException>(() => service.FindById(Guid.NewGuid()));
         }
 
@@ -231,8 +315,8 @@ namespace LogicTest.ServicesTest
             var service = CreateService(out _, out var repo, out _);
             var product1 = new FakeProduct { id = Guid.NewGuid(), name = "example1", quantity = 2 };
             var product2 = new FakeProduct { id = Guid.NewGuid(), name = "example2", quantity = 3 };
-            repo.SaveProduct(product1);
-            repo.SaveProduct(product2);
+            repo.Save(product1);
+            repo.Save(product2);
 
             var products = service.FindAll();
 
@@ -242,9 +326,11 @@ namespace LogicTest.ServicesTest
         }
 
         [Test]
+        //[ExpectedException(typeof(InvalidOperationException))]
         public void FindAll_EmptyList()
         {
             var service = CreateService(out _, out _, out _);
+            //service.FindAll();
             Assert.Throws<InvalidOperationException>(() => service.FindAll());
         }
     }
