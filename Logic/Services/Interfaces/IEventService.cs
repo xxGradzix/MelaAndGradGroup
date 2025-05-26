@@ -1,6 +1,4 @@
 ﻿using Data.API.Entities;
-using System;
-using System.Collections.Generic;
 
 namespace Logic.Services.Interfaces
 {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Logic.Services;
+﻿using Logic.Services;
 using Logic.Services.Interfaces;
 using Logic.Repositories.Interfaces;
 using Data.API.Entities;

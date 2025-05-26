@@ -71,8 +71,6 @@ namespace Logic.Services
 
         public IProduct SellProduct(Guid productId, Guid userId, int quantity)
         {
-            // Console.WriteLine($"GetUser called with id: {userId}");
-
             var user = userRepository.GetUser(userId);
             if (user == null)
                 throw new InvalidOperationException("Error, user does not exist.");
