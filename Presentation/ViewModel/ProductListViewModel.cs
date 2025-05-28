@@ -1,78 +1,132 @@
 ﻿using Presentation.Model.API;
 using System;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Windows.Input;
 
 namespace Presentation.ViewModel
 {
     internal class ProductListViewModel : PropertyChange
     {
-        private readonly IProductModelData _model;
-        private ProductViewModel _selectedProduct;
+        private IModel model;
 
-        public ObservableCollection<ProductViewModel> Products { get; private set; }
+        private ProductViewModel selectedViewModel;
+        private ProductViewModel selectedProduct;
 
-        public ICommand LoadCommand { get; }
-        public ICommand AddCommand { get; }
-        public ICommand DeleteCommand { get; }
+        public ObservableCollection<ProductViewModel> Products { get; } = new();
 
-        public ProductViewModel SelectedProduct
+        public ProductViewModel SelectedViewModel
         {
-            get => _selectedProduct;
-            set => SetProperty(ref _selectedProduct, value);
-        }
-
-        public ProductListViewModel() : this(IProductModelData.CreateModel()) { }
-
-        public ProductListViewModel(IProductModelData model)
-        {
-            _model = model;
-            Products = new ObservableCollection<ProductViewModel>();
-
-            LoadCommand = new RelayCommand(async _ => await LoadProductsAsync());
-            AddCommand = new RelayCommand(async _ => await AddProductAsync(), _ => SelectedProduct != null);
-            DeleteCommand = new RelayCommand(async _ => await DeleteProductAsync(), _ => SelectedProduct != null);
-        }
-
-        private ProductViewModel ToViewModel(IProductModelData model)
-        {
-            return new ProductViewModel(model.id, model.name, model.price, model.quantity, model.description);
-        }
-
-        private async Task LoadProductsAsync()
-        {
-            Products.Clear();
-            var allProducts = await _model.GetAllProductsAsync();
-            foreach (var product in allProducts)
+            get => selectedViewModel;
+            set
             {
-                Products.Add(ToViewModel(product));
+                selectedViewModel = value;
+                OnPropertyChanged(nameof(SelectedViewModel));
             }
         }
 
-        private async Task AddProductAsync()
+        public ProductViewModel SelectedProduct
         {
-            if (SelectedProduct == null)
-                return;
+            get => selectedProduct;
+            set
+            {
+                selectedProduct = value;
+                OnPropertyChanged(nameof(SelectedProduct));
+                OnPropertyChanged(nameof(CanModifyProduct));
+                SelectedViewModel = selectedProduct;
+            }
+        }
+        public bool CanModifyProduct => SelectedProduct != null;
 
-            await _model.AddProductAsync(
-                SelectedProduct.Id,
+        public ICommand RefreshCommand { get; }
+        public ICommand AddProductCommand { get; }
+        public ICommand DeleteProductCommand { get; }
+        public ICommand SaveProductCommand { get; }
+
+
+        public ProductListViewModel()
+        {
+            Products.Add(new ProductViewModel
+            {
+                Id = Guid.NewGuid(),
+                Name = "Sample Product",
+                Price = 10.0,
+                Quantity = 100,
+                Description = "This is a sample product."
+            });
+        }
+
+        public ProductListViewModel(IModel model)
+        {
+            this.model = model ?? throw new ArgumentNullException(nameof(model));
+
+            RefreshCommand = new RelayCommand(_ => LoadProducts());
+            AddProductCommand = new RelayCommand(_ => AddProduct());
+            DeleteProductCommand = new RelayCommand(_ => DeleteProduct(), _ => SelectedProduct != null);
+            SaveProductCommand = new RelayCommand(_ => SaveProduct(), _ => SelectedProduct != null);
+
+            LoadProducts();
+        }
+
+        private void LoadProducts()
+        {
+            Products.Clear();
+            foreach (var product in model.GetAllProducts())
+            {
+                Products.Add(new ProductViewModel(product));
+            }
+
+            if (Products.Count > 0)
+            {
+                SelectedProduct = Products[0];
+            }
+        }
+
+        private void AddProduct()
+        {
+            var newProduct = new ProductViewModel
+            {
+                Id = Guid.NewGuid(),
+                Name = "New Product",
+                Price = 0.0,
+                Quantity = 0,
+                Description = ""
+            };
+
+            Products.Add(newProduct);
+            SelectedProduct = newProduct;
+        }
+
+        private void DeleteProduct()
+        {
+            if (SelectedProduct != null)
+            {
+                model.DeleteProduct(SelectedProduct.Id);
+                Products.Remove(SelectedProduct);
+                SelectedProduct = null;
+                SelectedViewModel = null;
+                OnPropertyChanged(nameof(CanModifyProduct));
+            }
+        }
+
+        private void SaveProduct()
+        {
+            if (SelectedProduct == null) return;
+
+            var existing = model.GetProductById(SelectedProduct.Id);
+            if (existing != null)
+            {
+                model.DeleteProduct(existing.id);
+            }
+
+            model.AddProduct(
                 SelectedProduct.Name,
                 SelectedProduct.Price,
                 SelectedProduct.Quantity,
                 SelectedProduct.Description
             );
 
-            await LoadProductsAsync();
-        }
-
-        private async Task DeleteProductAsync()
-        {
-            if (SelectedProduct == null)
-                return;
-
-            await _model.DeleteProductAsync(SelectedProduct.Id);
-            await LoadProductsAsync();
+            LoadProducts();
         }
     }
 }

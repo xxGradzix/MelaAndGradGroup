@@ -1,55 +1,75 @@
-﻿using System;
-using System.ComponentModel;
+﻿using Presentation.Model;
+using Presentation.Model.API;
+using System;
 
 namespace Presentation.ViewModel
 {
     internal class ProductViewModel : PropertyChange
     {
-        private Guid _id;
-        private string _name;
-        private double _price;
-        private int _quantity;
-        private string _description;
-
-        public ProductViewModel() { }
-
-        public ProductViewModel(Guid id, string name, double price, int quantity, string description)
-        {
-            _id = id;
-            _name = name;
-            _price = price;
-            _quantity = quantity;
-            _description = description;
-        }
+        private Guid id;
+        private string name = string.Empty;
+        private double price;
+        private int quantity;
+        private string description = string.Empty;
 
         public Guid Id
         {
-            get => _id;
-            set => SetProperty(ref _id, value);
+            get => id;
+            set { id = value; OnPropertyChanged(nameof(Id)); }
         }
 
         public string Name
         {
-            get => _name;
-            set => SetProperty(ref _name, value);
+            get => name;
+            set { name = value; OnPropertyChanged(nameof(Name)); }
         }
 
         public double Price
         {
-            get => _price;
-            set => SetProperty(ref _price, value);
+            get => price;
+            set { price = value; OnPropertyChanged(nameof(Price)); }
         }
 
         public int Quantity
         {
-            get => _quantity;
-            set => SetProperty(ref _quantity, value);
+            get => quantity;
+            set { quantity = value; OnPropertyChanged(nameof(Quantity)); }
         }
 
         public string Description
         {
-            get => _description;
-            set => SetProperty(ref _description, value);
+            get => description;
+            set { description = value; OnPropertyChanged(nameof(Description)); }
+        }
+
+        public ProductViewModel() { }
+
+        public ProductViewModel(IProductModelData data)
+        {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
+            Id = data.id;
+            Name = data.name;
+            Price = data.price;
+            Quantity = data.quantity;
+            Description = data.description;
+        }
+
+        public static ProductViewModel FromModel(IProductModelData model)
+        {
+            return new ProductViewModel
+            {
+                Id = model.id,
+                Name = model.name,
+                Price = model.price,
+                Quantity = model.quantity,
+                Description = model.description
+            };
+        }
+
+        public IProductModelData ToModel()
+        {
+            return new ProductModelData(Id, Name, Price, Quantity, Description);
         }
     }
 }

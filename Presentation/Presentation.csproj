@@ -13,8 +13,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="View\EventDetailView.xaml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Page>
+    <Page Update="View\EventMasterView.xaml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Page>
+    <Page Update="View\UserDetailView.xaml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Page>
     <Page Update="View\ProductDetailView.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Page>
+    <Page Update="View\UserMasterView.xaml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Page>
     <Page Update="View\ProductMasterView.xaml">

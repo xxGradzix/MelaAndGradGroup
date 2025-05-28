@@ -13,6 +13,5 @@ namespace Data.Events
         public int quantityChange { get; set; }
 
         public DateTime timestamp { get; set; }
-
     }
 }

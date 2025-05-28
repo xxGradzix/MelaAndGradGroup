@@ -4,6 +4,7 @@ namespace Logic.Services.Interfaces
 {
     public interface IProductService
     {
+        IProduct AddProduct(IProduct iproduct);
         List<IProduct> FindAll();
         IProduct? FindById(Guid id);
         bool DeleteProductById(Guid id);

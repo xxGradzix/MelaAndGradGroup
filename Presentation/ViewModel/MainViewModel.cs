@@ -1,49 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using Presentation.Model;
+using Presentation.Model.API;
+using Logic.Services;
+using Logic.Services.Interfaces;
 using System.Windows.Input;
 
 namespace Presentation.ViewModel
 {
     internal class MainViewModel : PropertyChange
     {
-        private PropertyChange _selectedViewModel;
+        private object selectedViewModel;
 
-        public PropertyChange SelectedViewModel
+        public object SelectedViewModel
         {
-            get => _selectedViewModel;
-            set => SetProperty(ref _selectedViewModel, value);
+            get => selectedViewModel;
+            set
+            {
+                selectedViewModel = value;
+                OnPropertyChanged(nameof(SelectedViewModel));
+            }
         }
 
-        public ICommand UpdateViewCommand { get; }
+        public ICommand ShowProductViewCommand { get; }
+        public ICommand ShowUserViewCommand { get; }
+        public ICommand ShowEventViewCommand { get; }
 
         public MainViewModel()
         {
-            UpdateViewCommand = new RelayCommand(ChangeView);
+            ShowProductViewCommand = new RelayCommand(_ => ShowProductView());
+            ShowUserViewCommand = new RelayCommand(_ => ShowUserView());
+            ShowEventViewCommand = new RelayCommand(_ => ShowEventView());
+
+            ShowProductView();
+        }
+
+        private void ShowProductView()
+        {
             SelectedViewModel = new ProductListViewModel();
         }
 
-        private void ChangeView(object? parameter)
+        private void ShowUserView()
         {
-            switch (parameter?.ToString())
-            {
-                case "Products":
-                    SelectedViewModel = new ProductListViewModel();
-                    break;
-                //case "Users":
-                //    SelectedViewModel = new UserListViewModel();
-                //    break;
-                //case "Orders":
-                //    SelectedViewModel = new OrderListViewModel();
-                //    break;
-                //default:
-                //    SelectedViewModel = new ProductListViewModel();
-                //    break;
-            }
+            SelectedViewModel = new UserListViewModel();
+        }
+
+        private void ShowEventView()
+        {
+            SelectedViewModel = new EventListViewModel();
         }
     }
 }
