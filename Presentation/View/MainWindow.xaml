@@ -22,7 +22,7 @@
         <StackPanel DockPanel.Dock="Left" Width="150" Background="#EEE">
             <Button Content="Products" Command="{Binding ShowProductViewCommand}" Margin="5"/>
             <Button Content="Users" Command="{Binding ShowUserViewCommand}" Margin="5"/>
-            <Button Content="Events" Command="{Binding ShowEventViewCommand}" Margin="5"/>
+            <!--<Button Content="Events" Command="{Binding ShowEventViewCommand}" Margin="5"/> -->
         </StackPanel>
 
         <ContentControl Content="{Binding SelectedViewModel}" />
