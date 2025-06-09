@@ -36,7 +36,7 @@ namespace Logic.Services
             var user = userRepository.FindByID(id);
             if (user == null)
             {
-                throw new InvalidOperationException("Error, no user with such id.");
+                return        null;        
             }
             return user;
         }
@@ -46,7 +46,8 @@ namespace Logic.Services
             var users = userRepository.FindAll();
             if (users.Count == 0)
             {
-                throw new InvalidOperationException("Error, no users found.");
+                // throw new InvalidOperationException("Error, no users found.");
+                return new List<IUser>();
             }
             return users.Cast<IUser>().ToList();
         }

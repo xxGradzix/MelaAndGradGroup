@@ -54,7 +54,7 @@ namespace Logic.Services
             var product = productRepository.FindByID(id);
             if (product == null)
             {
-                throw new InvalidOperationException("Error, no product with such id.");
+                return        null;        
             }
 
             return product;
