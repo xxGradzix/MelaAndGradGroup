@@ -65,7 +65,8 @@ namespace Logic.Services
             var products = productRepository.FindAll();
             if (products.Count == 0)
             {
-                throw new InvalidOperationException("Error, no products found.");
+                // throw new InvalidOperationException("Error, no products found.");
+                return new List<IProduct>();
             }
             return products.Cast<IProduct>().ToList();
         }

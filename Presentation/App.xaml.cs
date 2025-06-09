@@ -24,9 +24,12 @@ namespace Presentation
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            
             base.OnStartup(e);
 
             var services = new ServiceCollection();
+            
+            
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
@@ -48,18 +51,16 @@ namespace Presentation
             
             services.AddSingleton<MainWindow>();
             
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseMySql(
-                    configuration.GetConnectionString("DefaultConnection"),
-                    ServerVersion.AutoDetect(configuration.GetConnectionString("DefaultConnection"))
-                ));
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
             
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlite(connectionString));
             
             _serviceProvider = services.BuildServiceProvider();
             using (var scope = _serviceProvider.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                db.Database.Migrate();
+                db.Database.EnsureCreated();
             }
             
             var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
