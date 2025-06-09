@@ -7,7 +7,7 @@ namespace Data.Users
 
     public class User : IUser
     {
-        public Guid id { get; private set; }
+        public Guid id { get; set; }
         public string username { get; set; }
         public string email { get; set; }
         public string password { get; set; }

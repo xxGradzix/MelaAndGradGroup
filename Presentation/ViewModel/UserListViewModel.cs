@@ -31,23 +31,6 @@ namespace Presentation.ViewModel
         public ICommand RemoveUserCommand { get; }
         public ICommand RefreshUsersCommand { get; }
 
-        // Konstruktor dla design-time lub testów
-        public UserListViewModel()
-        {
-            Users.Add(new UserViewModel
-            {
-                Id = Guid.NewGuid(),
-                Username = "SampleUser",
-                Password = "password",
-                Email = "user@example.com",
-                PhoneNumber = "123456789",
-                Role = Model.API.Enums.RoleModel.USER
-            });
-
-            AddUserCommand = new RelayCommand(_ => { });
-            RemoveUserCommand = new RelayCommand(_ => { }, _ => SelectedUser != null);
-            RefreshUsersCommand = new RelayCommand(_ => { });
-        }
 
         // Konstruktor główny
         public UserListViewModel(IModel model)

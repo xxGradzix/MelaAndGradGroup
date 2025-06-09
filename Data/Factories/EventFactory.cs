@@ -3,7 +3,7 @@ using Data.Events;
 
 namespace Data.Factories
 {
-    internal class EventFactory : IEventFactory
+    public class EventFactory : IEventFactory
     {
         
         public IEvent CreateProductBoughtEvent(Guid userId, Guid productId, int quantity)

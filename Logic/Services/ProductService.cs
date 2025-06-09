@@ -5,14 +5,14 @@ using Logic.Services.Interfaces;
 
 namespace Logic.Services
 {
-    internal sealed class ProductService : IProductService
+    public class ProductService : IProductService
     {
         private readonly IUserRepository userRepository;
         private readonly IProductRepository productRepository;
         private readonly IEventService eventService;
         private readonly IEventFactory eventFactory;
 
-        internal ProductService(
+        public ProductService(
         IUserRepository userRepository,
         IProductRepository repository,
         IEventService eventService,

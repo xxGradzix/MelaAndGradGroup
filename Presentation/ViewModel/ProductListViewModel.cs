@@ -42,19 +42,8 @@ namespace Presentation.ViewModel
         public ICommand AddProductCommand { get; }
         public ICommand DeleteProductCommand { get; }
         public ICommand SaveProductCommand { get; }
-
-
-        public ProductListViewModel()
-        {
-            Products.Add(new ProductViewModel
-            {
-                Id = Guid.NewGuid(),
-                Name = "Sample Product",
-                Price = 10.0,
-                Quantity = 100,
-                Description = "This is a sample product."
-            });
-        }
+        
+        
 
         public ProductListViewModel(IModel model)
         {

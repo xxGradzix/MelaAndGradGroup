@@ -5,14 +5,14 @@ using Logic.Services.Interfaces;
 
 namespace Logic.Services
 {
-    internal sealed class UserService : IUserService
+    public class UserService : IUserService
     {
         private readonly IUserRepository userRepository;
         private readonly IEventService eventService;
         private readonly IEventFactory eventFactory;
         private readonly IUserFactory userFactory;
 
-        internal UserService(IUserRepository repository, IEventService eventService, IEventFactory eventFactory, IUserFactory userFactory)
+        public UserService(IUserRepository repository, IEventService eventService, IEventFactory eventFactory, IUserFactory userFactory)
         {
             this.userRepository = repository;
             this.eventService = eventService;

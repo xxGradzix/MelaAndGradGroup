@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace Presentation.ViewModel
 {
-    internal class PropertyChange : INotifyPropertyChanged
+    public class PropertyChange : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 

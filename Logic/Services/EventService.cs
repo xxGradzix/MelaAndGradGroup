@@ -3,7 +3,7 @@ using Logic.Services.Interfaces;
 
 namespace Logic.Services
 {
-    internal sealed class EventService : IEventService
+    public class EventService : IEventService
     {
         private readonly List<IEvent> events = new();
 

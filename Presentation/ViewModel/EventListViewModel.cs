@@ -26,15 +26,7 @@ namespace Presentation.ViewModel
         public ICommand AddEventCommand { get; }
         public ICommand RemoveEventCommand { get; }
 
-        // Konstruktor do design-time
-        public EventListViewModel()
-        {
-            Events.Add(new EventViewModel
-            {
-                EventId = Guid.NewGuid(),
-                Timestamp = DateTime.Now,
-            });
-        }
+     
 
         // Konstruktor produkcyjny
         public EventListViewModel(IModel model)
