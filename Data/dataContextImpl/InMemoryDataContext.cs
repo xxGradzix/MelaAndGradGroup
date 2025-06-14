@@ -1,7 +1,7 @@
 ﻿using Data.API;
 using Data.API.Entities;
 
-namespace Data.Implementations
+namespace Data.dataContextImpl
 {
     internal sealed class InMemoryDataContext : IData
     {
