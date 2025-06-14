@@ -2,19 +2,13 @@
 
 namespace Data.API
 {
-    public interface IData
+    public abstract class IData
     {
-        IUser? GetUser(Guid id);
-        List<IUser> GetUsers();
-        void AddUser(IUser user);
-        bool DeleteUser(Guid id);
-
-        IProduct? getProduct(Guid id);
-        List<IProduct> getProducts();
-        void AddProduct(IProduct item);
-        bool DeleteProduct(Guid id);
-
-        List<IEvent> GetEvents();
-        void AddEvent(IEvent productEvent);
+        public abstract void AddCatalog(string name, double price, string description);
+        public abstract void AddUser(string username, string password, string email, string phoneNumber);
+        public abstract void AddUserEvent(int stateId, int userId);
+        public abstract void AddDatabaseEvent(int stateId);
+        public abstract void AddState(int nrOfProducts, int catalogId);
+        public abstract void ChangeState(int stateId, int change);
     }
 }

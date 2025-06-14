@@ -1,13 +1,12 @@
-﻿using Data.Enums;
-namespace Data.API.Entities
+﻿namespace Data.API.Entities
 {
-    public interface IUser
+    public abstract class IUser
     {
-        Guid id { get; }
-        string username { get; set; }
-        string password { get; set; }
-        string email { get; set; }
-        string phoneNumber { get; set; }
-        Role role { get; set; }
+        public int id { get; set; }
+        public string username { get; set; }
+        public string password { get; set; }
+        public string email { get; set; }
+        public string phoneNumber { get; set; }
+        //Role role { get; set; }
     }
 }

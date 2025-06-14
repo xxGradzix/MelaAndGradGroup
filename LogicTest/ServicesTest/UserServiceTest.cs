@@ -3,6 +3,7 @@ using Logic.Services.Interfaces;
 using Logic.Repositories.Interfaces;
 using Data.API.Entities;
 using Data.Enums;
+using Data.API.Factories;
 
 
 namespace LogicTest.ServicesTest

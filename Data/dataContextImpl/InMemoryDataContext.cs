@@ -1,62 +1,97 @@
 ﻿using Data.API;
 using Data.API.Entities;
+using Data.Events;
+using Data.Users;
+using Data.Catalogs;
+using Data.States;
 
 namespace Data.dataContextImpl
 {
-    internal sealed class InMemoryDataContext : IData
+    internal class InMemoryDataContext : IData
     {
-        private Dictionary<Guid, IUser> users = new();
-        private Dictionary<Guid, IProduct> products = new();
-        private List<IEvent> events = new();
+        internal List<Catalog> catalogs { get; } = new List<Catalog>();
+        internal List<Event> events { get; } = new List<Event>();
+        internal List<User> users { get; } = new List<User>();
+        internal List<State> states { get; } = new List<State>();
 
-        public IUser? GetUser(Guid id)
+        //public bool DeleteUser(Guid id)
+        //{
+        //    return users.Remove(id);
+        //}
+
+
+        //public bool DeleteCatalog(Guid id)
+        //{
+        //    return products.Remove(id);
+        //}
+
+        public override void AddCatalog(string name, double price, string description)
         {
-            return users.GetValueOrDefault(id);
+            Catalog c = new Catalog(catalogs.Count, name, price, description);
+            catalogs.Add(c);
+        }
+        public override void AddUser(string username, string password, string email, string phoneNumber)
+        {
+            User u = new User(users.Count, username, password, email, phoneNumber);
+            users.Add(u);
+        }
+        public override void AddState(int nrOfProducts, int catalogId)
+        {
+            State s = new State(states.Count, nrOfProducts, GetCatalogFromId(catalogId));
+            states.Add(s);
         }
 
-        public List<IUser> GetUsers()
+
+        public override void AddUserEvent(int stateId, int userId)
         {
-            return users.Values.ToList();
+            UserEvent e = new UserEvent(events.Count, GetStateFromId(stateId), GetUserFromId(userId));
+            events.Add(e);
+        }
+        public override void AddDatabaseEvent(int stateId)
+        {
+            DatabaseEvent e = new DatabaseEvent(events.Count, GetStateFromId(stateId));
+            events.Add(e);
         }
 
-        public void AddUser(IUser user)
+        public override void ChangeState(int stateId, int change)
         {
-            users[user.id] = user;
+            GetStateFromId(stateId).nrOfProducts += change;
         }
 
-        public bool DeleteUser(Guid id)
+        User GetUserFromId(int id)
         {
-            return users.Remove(id);
+            foreach (User users in users)
+            {
+                if (users.id == id) return users;
+            }
+            throw new Exception("No user with id: " + id + " found in database.");
         }
 
-        public IProduct? getProduct(Guid id)
+        Event GetEventFromId(int id)
         {
-            return products.GetValueOrDefault(id);
+            foreach (Event e in events)
+            {
+                if (e.eventId == id) return e;
+            }
+            throw new Exception("No event with id: " + id + " found in database.");
         }
 
-        public List<IProduct> getProducts()
+        State GetStateFromId(int id)
         {
-            return products.Values.ToList();
+            foreach (State state in states)
+            {
+                if (state.stateId == id) return state;
+            }
+            throw new Exception("No state with id: " + id + " found in database.");
         }
 
-        public void AddProduct(IProduct item)
+        Catalog GetCatalogFromId(int id)
         {
-            products[item.id] = item;
-        }
-
-        public bool DeleteProduct(Guid id)
-        {
-            return products.Remove(id);
-        }
-
-        public List<IEvent> GetEvents()
-        {
-            return events.ToList();
-        }
-
-        public void AddEvent(IEvent productEvent)
-        {
-            events.Add(productEvent);
+            foreach (Catalog catalog in catalogs)
+            {
+                if (catalog.id == id) return catalog;
+            }
+            throw new Exception("No catalog with id: " + id + " found in database.");
         }
     }
 }

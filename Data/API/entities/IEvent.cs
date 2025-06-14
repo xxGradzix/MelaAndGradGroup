@@ -1,8 +1,8 @@
 ﻿namespace Data.API.Entities
 {
-    public interface IEvent
+    public abstract class IEvent
     {
-        Guid eventId { get; }
-        DateTime timestamp { get; set; }
+        public int eventId { get; set; }
+        public IState state { get; set; }
     }
 }

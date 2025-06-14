@@ -1,4 +1,4 @@
-﻿namespace Data.Catalog
+﻿namespace Data.API.Entities
 {
     public abstract class ICatalog
     {
@@ -10,7 +10,7 @@
 
         // public int quantity { get; set; }
 
-        public String description { get; set; }
+        public string description { get; set; }
         
     }
 }

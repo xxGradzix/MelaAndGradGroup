@@ -1,4 +1,6 @@
-﻿namespace Data.Catalog
+﻿using Data.API.Entities;
+
+namespace Data.Catalogs
 {
     internal class Catalog: ICatalog
     {
