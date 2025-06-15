@@ -58,7 +58,7 @@ namespace Data.dataContextImpl
             GetStateFromId(stateId).nrOfProducts += change;
         }
 
-        User GetUserFromId(int id)
+        public override IUser GetUserFromId(int id)
         {
             foreach (User users in users)
             {
@@ -67,7 +67,7 @@ namespace Data.dataContextImpl
             throw new Exception("No user with id: " + id + " found in database.");
         }
 
-        Event GetEventFromId(int id)
+        public override IEvent GetEventFromId(int id)
         {
             foreach (Event e in events)
             {
@@ -76,7 +76,7 @@ namespace Data.dataContextImpl
             throw new Exception("No event with id: " + id + " found in database.");
         }
 
-        State GetStateFromId(int id)
+        public override IState GetStateFromId(int id)
         {
             foreach (State state in states)
             {
@@ -85,13 +85,33 @@ namespace Data.dataContextImpl
             throw new Exception("No state with id: " + id + " found in database.");
         }
 
-        Catalog GetCatalogFromId(int id)
+        public override ICatalog GetCatalogFromId(int id)
         {
             foreach (Catalog catalog in catalogs)
             {
                 if (catalog.id == id) return catalog;
             }
             throw new Exception("No catalog with id: " + id + " found in database.");
+        }
+
+        public override List<IUser> GetUsers()
+        {
+            List<IUser> userList = new List<IUser>();
+            foreach (User user in users)
+            {
+                userList.Add(user);
+            }
+            return userList;
+        }
+
+        public override List<ICatalog> getProducts()
+        {
+            List<ICatalog> catalogList = new List<ICatalog>();
+            foreach (Catalog catalog in catalogs)
+            {
+                catalogList.Add(catalog);
+            }
+            return catalogList;
         }
     }
 }

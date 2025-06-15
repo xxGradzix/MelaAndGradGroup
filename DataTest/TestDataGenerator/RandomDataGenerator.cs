@@ -1,11 +1,8 @@
 ﻿using Data.API;
-using Data.API.Entities;
-using Data.Catalog;
 using Data.dataContextImpl;
 using Data.Users;
-using DataTest.TestDataGenerator;
 
-namespace DataTest.TestDataGeneration
+namespace DataTest.TestDataGenerator
 {
     internal class RandomDataGenerator : IDataGenerator
     {
@@ -30,15 +27,15 @@ namespace DataTest.TestDataGeneration
 
             for (int i = 0; i < 10; i++)
             {
-                IProduct product = new Product(
-                    name: names[_random.Next(names.Length)],
-                    price: prices[_random.Next(prices.Length)],
-                    quantity: quantity[_random.Next(quantity.Length)],
-                    description: descriptions[_random.Next(descriptions.Length)]
-                );
+                // IProduct product = new Product(
+                //     name: names[_random.Next(names.Length)],
+                //     price: prices[_random.Next(prices.Length)],
+                //     quantity: quantity[_random.Next(quantity.Length)],
+                //     description: descriptions[_random.Next(descriptions.Length)]
+                // );
     
                 
-                _data.AddProduct(product);
+                _data.AddCatalog(names[_random.Next(names.Length)], prices[_random.Next(prices.Length)], descriptions[_random.Next(descriptions.Length)]);
             }
         }
 
@@ -56,8 +53,8 @@ namespace DataTest.TestDataGeneration
                 string email = mails[_random.Next(mails.Length)];
                 string phone = phones[_random.Next(phones.Length)];
                 
-                User reader = new Customer(name, email, password, phone);
-                _data.AddUser(reader);
+                // User reader = new Customer(name, email, password, phone);
+                _data.AddUser(name, password, email, phone);
             }
         }
 
