@@ -99,6 +99,6 @@ public class DataAPITest
         context.AddState(nrOfProducts, 0);
 
         context.ChangeState(0, 4);
-        Assert.IsTrue(context.states[0].nrOfProducts == nrOfProducts);
+        Assert.IsTrue(context.states[0].nrOfProducts == nrOfProducts + 4);
     }
 }

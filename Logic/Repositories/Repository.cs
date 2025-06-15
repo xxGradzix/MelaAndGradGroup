@@ -55,5 +55,10 @@ namespace Logic.Repositories
         {
             context.AddCatalog(name, price, description);
         }
+
+        public List<ICatalog> FindAllProducts()
+        {
+            return context.getProducts();
+        }
     }
 }
