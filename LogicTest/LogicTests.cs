@@ -1,65 +1,55 @@
 ﻿using Logic;
 using Logic.Services;
+using LogicLayerTest;
 
-namespace LogicLayerTest
+namespace LogicTest
 {
     public sealed class LogicTests
     {
-
         [Test]
-        public void TestBorrowCatalog()
+        public void CatalogTests()
         {
-            DataService ds = new DataService();
-            try
-            {
-                ds.BuyCatalog(1, 1);
-            }
-            catch (Exception ex)
-            {
-                Assert.IsTrue(ex is NullReferenceException);
-            }
+            TestDataContext context = new TestDataContext();
+            DataService service = new DataService(context);
+            service.AddCatalog(0, "namer", 1, "desc");
+            Assert.IsTrue(service.GetCatalog(0).name == "namer");
+            Assert.IsTrue(service.GetCatalog(0).price == 1);
+            Assert.IsTrue(service.GetCatalog(0).description == "desc");
         }
-
         [Test]
-        public void TestReturnCatalog()
+        public void UserTests()
         {
-            DataService ds = new DataService();
-            try
-            {
-                ds.SellCatalog(1, 1);
-            }
-            catch (Exception ex)
-            {
-                Assert.IsTrue(ex is NullReferenceException);
-            }
+            TestDataContext context = new TestDataContext();
+            DataService service = new DataService(context);
+            service.AddUser(0, "namer", "pass", "email", "123456789");
+            Assert.IsTrue(service.GetUser(0).password == "pass");
+            Assert.IsTrue(service.GetUser(0).email == "email");
         }
-
         [Test]
-        public void TestDestroyCatalog()
+        public void EventTests()
         {
-            DataService ds = new DataService();
-            try
-            {
-                ds.RemoveCatalog(1);
-            }
-            catch (Exception ex)
-            {
-                Assert.IsTrue(ex is NullReferenceException);
-            }
+            TestDataContext context = new TestDataContext();
+            DataService service = new DataService(context);
+            service.AddCatalog(0, "t", 1, "1");
+            
+            service.AddState(0, 1, 0);
+            
+            service.AddEvent(0, 0);
+            var eventService = service.GetEvent(0);
+            
+            Console.WriteLine(eventService.stateId);
+
+            Assert.IsTrue(eventService.stateId == service.GetState(0).stateId);
         }
-
         [Test]
-        public void TestAddCatalog()
+        public void StateTests()
         {
-            DataService ds = new DataService();
-            try
-            {
-                ds.AddCatalog(1);
-            }
-            catch (Exception ex)
-            {
-                Assert.IsTrue(ex is NullReferenceException);
-            }
+            TestDataContext context = new TestDataContext();
+            DataService service = new DataService(context);
+            service.AddCatalog(0, "t", 1, "1");
+            service.AddState(0, 1, 0);
+            Assert.IsTrue(service.GetState(0).nrOfProducts == 1);
+            Assert.IsTrue(service.GetState(0).catalogId == service.GetCatalog(0).id);
         }
     }
 }

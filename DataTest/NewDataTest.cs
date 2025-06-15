@@ -38,8 +38,8 @@ namespace DataTest
             Catalog c = new Catalog(1, "test", 1234, "desc");
             User u = new User(1, "Marcin", "test1234", "mail.mail.com", "123456789");
             State s = new State(1, 10, c);
-            UserEvent e = new UserEvent(1, s, u);
-            Assert.IsTrue(e.eventId == 1 && e.state == s && e.user == u);
+            Event e = new Event(1, s);
+            Assert.IsTrue(e.eventId == 1 && e.state == s);
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace DataTest
         {
             Catalog c = new Catalog(1, "test", 1234, "desc");
             State s = new State(1, 10, c);
-            DatabaseEvent e = new DatabaseEvent(1, s);
+            Event e = new Event(1, s);
             Assert.IsTrue(e.eventId == 1 && e.state == s);
         }
 

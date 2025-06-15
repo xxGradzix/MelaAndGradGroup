@@ -11,7 +11,7 @@ namespace DataTest.TestDataGenerator
 
         public RandomDataGenerator()
         {
-            _data = new InMemoryDataContext();
+            _data = new DataContext();
             GenerateProducts();
             GenerateUsers();
         }
@@ -35,7 +35,7 @@ namespace DataTest.TestDataGenerator
                 // );
     
                 
-                _data.AddCatalog(names[_random.Next(names.Length)], prices[_random.Next(prices.Length)], descriptions[_random.Next(descriptions.Length)]);
+                _data.AddCatalog(i, names[_random.Next(names.Length)], prices[_random.Next(prices.Length)], descriptions[_random.Next(descriptions.Length)]);
             }
         }
 
@@ -54,7 +54,7 @@ namespace DataTest.TestDataGenerator
                 string phone = phones[_random.Next(phones.Length)];
                 
                 // User reader = new Customer(name, email, password, phone);
-                _data.AddUser(name, password, email, phone);
+                _data.AddUser(i, name, password, email, phone);
             }
         }
 

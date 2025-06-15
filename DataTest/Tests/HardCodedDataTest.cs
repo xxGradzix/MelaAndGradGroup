@@ -16,13 +16,13 @@ namespace DataTest.Tests
         [Test]
         public void TestStaticProduct()
         {
-            Assert.AreEqual(1, _data.getProducts().Count, "Incorrect number of products");
+            Assert.AreEqual(1, _data.GetAllCatalog().Count, "Incorrect number of products");
         }
 
         [Test]
         public void TestStaticUser()
         {
-            Assert.AreEqual(1, _data.GetUsers().Count, "Incorrect number of users");
+            Assert.AreEqual(1, _data.GetAllUser().Count, "Incorrect number of users");
         }
     }
 }

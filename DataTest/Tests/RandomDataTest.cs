@@ -14,13 +14,13 @@ namespace DataTest.Tests
         [Test]
         public void TestGeneratedProdcuts()
         {
-            Assert.IsTrue(_data.getProducts().Count > 0, "No products generated");
+            Assert.IsTrue(_data.GetAllCatalog().Count > 0, "No products generated");
         }
 
         [SetUp]
         public void TestGeneratedUsers()
         {
-            Assert.IsTrue(_data.GetUsers().Count > 0, "No users generated");
+            Assert.IsTrue(_data.GetAllUser().Count > 0, "No users generated");
         }
     }
 }
