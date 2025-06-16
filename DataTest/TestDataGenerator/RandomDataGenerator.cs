@@ -25,7 +25,7 @@ namespace DataTest.TestDataGenerator
             int[] quantity = { 10, 200, 3000, 4000 };
             string[] descriptions = { "Um fotuto aligatore volante", "desc2", "desc 3", " desc 4" };
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 1; i <= 10; i++)
             {
                 // IProduct product = new Product(
                 //     name: names[_random.Next(names.Length)],
@@ -46,7 +46,7 @@ namespace DataTest.TestDataGenerator
             string[] mails = { "name1@example.org", "name2@gmail.com", "name3@example.org", "name4@example.org", "name5@gmail.com" };
             string[] phones = { "123456789", "987654321", "000000000", "666666666" };
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 1; i <= 5; i++)
             {
                 string name = names[_random.Next(names.Length)];
                 string password = passwords[_random.Next(passwords.Length)];

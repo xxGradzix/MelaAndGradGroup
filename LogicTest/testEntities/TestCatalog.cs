@@ -1,8 +1,9 @@
 ﻿using Data.API.Entities;
+using Data.Catalogs;
 
 namespace LogicTest.testEntities
 {
-    internal class TestCatalog : ICatalog
+    internal class TestCatalog : Catalog
     {
         public TestCatalog(int catalogId, string name, double price, string description)
         {

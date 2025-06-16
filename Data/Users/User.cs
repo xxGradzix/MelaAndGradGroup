@@ -3,7 +3,7 @@ using Data.API.Entities;
 
 namespace Data.Users
 {
-    internal class User : IUser
+    public class User : IUser
     {
         
         public int id { get; set; }

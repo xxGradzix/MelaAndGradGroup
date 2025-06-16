@@ -24,8 +24,8 @@ public class DataAPITest
         DataContext context = new DataContext();
 
         string name = "testname";
-        context.AddUser(0, name, "password", "email", "123456789");
-        Assert.IsTrue(context.GetUser(0).username == "testname");
+        context.AddUser(1, name, "password", "email", "123456789");
+        Assert.IsTrue(context.GetUser(1).username == "testname");
     }
 
     [Test]
@@ -53,9 +53,9 @@ public class DataAPITest
         string name = "Test";
         string desc = "Desc"; 
         int price = 12;
-        int catalogId = 0;
-        int stateId = 0;
-        int userId = 0;
+        int catalogId = 1;
+        int stateId = 1;
+        int userId = 1;
         context.AddCatalog(catalogId, name, price, desc);
 
         int nrOfProducts = 123;
@@ -64,8 +64,8 @@ public class DataAPITest
         string username = "testname";
         context.AddUser(userId, username, "password", "email", "123456789");
 
-        context.AddEvent(0,stateId);
-        Assert.IsTrue(context.GetEvent(0).state.nrOfProducts == nrOfProducts);
+        context.AddEvent(1,stateId);
+        Assert.IsTrue(context.GetEvent(1).state.nrOfProducts == nrOfProducts);
     }
 
     [Test]
@@ -76,14 +76,14 @@ public class DataAPITest
         string name = "Test";
         string desc = "Desc"; 
         int price = 12;
-        int catalogId = 0;
+        int catalogId = 1;
         context.AddCatalog(catalogId, name, price, desc);
 
         int nrOfProducts = 123;
-        context.AddState(0, nrOfProducts, catalogId);
+        context.AddState(1, nrOfProducts, catalogId);
 
-        context.AddEvent(0, 0);
-        Assert.IsTrue(context.GetEvent(0).state.nrOfProducts == 123);
+        context.AddEvent(1, 1);
+        Assert.IsTrue(context.GetEvent(1).state.nrOfProducts == 123);
     }
 
     [Test]
@@ -98,9 +98,9 @@ public class DataAPITest
         context.AddCatalog(1, name, price, desc);
 
         int nrOfProducts = 123;
-        context.AddState(0, nrOfProducts, 0);
+        context.AddState(1, nrOfProducts, 0);
 
-        context.ChangeState(0, 4);
-        Assert.IsTrue(context.GetState(0).nrOfProducts == nrOfProducts + 4);
+        context.ChangeState(1, 4);
+        Assert.IsTrue(context.GetState(1).nrOfProducts == nrOfProducts + 4);
     }
 }

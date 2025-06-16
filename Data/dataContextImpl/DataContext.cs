@@ -163,20 +163,23 @@ namespace Data.dataContextImpl
 
         public void AddCatalog(int id, string name, double price, string description)
         {
-            // if (!catalogs.ContainsKey(id))
-            // {
-            //     Catalog c = new Catalog(id, name, price, description);
-            //     catalogs.Add(id, c);
-            // }
-            // else
-            // {
-            //     throw new Exception($"Catalog with id {id} already exists.");
-            // }
-            
-            Catalog c = new Catalog(id, name, price, description);
-            // catalogs.Add(id, c);
-            _context.Products.Add(c);
-            _context.SaveChanges();
+            var existing = _context.Products.FirstOrDefault(c => c.id == id);
+            if (existing != null)
+            {
+                // Możesz zaktualizować istniejący katalog lub rzucić wyjątek
+                throw new Exception($"Catalog with id {id} already exists.");
+                // Lub, jeśli chcesz zaktualizować:
+                // existing.name = name;
+                // existing.price = price;
+                // existing.description = description;
+                // _context.Products.Update(existing);
+            }
+            else
+            {
+                Catalog c = new Catalog(id, name, price, description);
+                _context.Products.Add(c);
+                _context.SaveChanges();
+            }
         }
 
         public void AddUser(int id, string username, string password, string email, string phoneNumber)
@@ -201,6 +204,9 @@ namespace Data.dataContextImpl
             State s = new State(id, nrOfProducts, (Catalog)GetCatalog(catalogId));
             // states.Add(s);
             _context.States.Add(s);
+            // Console.WriteLine("State added with ID: " + s.Id);
+            // Console.WriteLine("State : " + GetAllState()) ;
+            
             _context.SaveChanges();
         }
 

@@ -1,6 +1,10 @@
 ﻿
 using Data.API;
 using Data.API.Entities;
+using Data.Catalogs;
+using Data.Events;
+using Data.States;
+using Data.Users;
 using LogicLayerTest;
 using LogicTest.testEntities;
 
@@ -8,178 +12,90 @@ namespace LogicTest
 {
     internal class TestDataContext: IData
     {
-        internal List<ICatalog> catalogs { get; } = new();
-        internal List<IEvent> events { get; } = new();
-        internal List<IUser> users { get; } = new();
-        internal List<IState> states { get; } = new();
+        private readonly Dictionary<int, Catalog> catalogs = new();
+        private readonly Dictionary<int, User> users = new();
+        private readonly Dictionary<int, State> states = new();
+        private readonly Dictionary<int, Event> events = new();
+
+        public List<ICatalog> GetAllCatalog() => catalogs.Values.Cast<ICatalog>().ToList();
+        public List<IUser> GetAllUser() => users.Values.Cast<IUser>().ToList();
+        public List<IEvent> GetAllEvent() => events.Values.Cast<IEvent>().ToList();
+        public List<IState> GetAllState() => states.Values.Cast<IState>().ToList();
 
         public void AddCatalog(int id, string name, double price, string description)
         {
-            TestCatalog c = new TestCatalog(id, name, price, description);
-            catalogs.Add(c);
+            if (catalogs.ContainsKey(id))
+                throw new System.Exception($"Catalog with id {id} already exists.");
+            catalogs[id] = new Catalog(id, name, price, description);
         }
 
         public void AddUser(int id, string username, string password, string email, string phoneNumber)
         {
-            TestUser u = new TestUser(id, username, password, email, phoneNumber);
-            users.Add(u);
+            if (users.ContainsKey(id))
+                throw new System.Exception($"User with id {id} already exists.");
+            users[id] = new User(id, username, password, email, phoneNumber);
         }
 
-
-        public void AddEvent(int eventId, int stateId)
+        public void AddEvent(int id, int stateId)
         {
-            var state = GetStateFromId(stateId);
-            if (state == null)
-            {
-                throw new ArgumentException($"State with ID {stateId} does not exist.");
-            }
-            Console.WriteLine($"Adding event with ID {eventId} for state ID {stateId}. and state: {state}");
-            TestEvent stateEvent = new TestEvent(eventId, state);
-            events.Add(stateEvent);
-            // Console.WriteLine($"Event with ID {eventId} added for state ID {stateId}. -------------------------------");
-            // Console.WriteLine($"Event count: {events.Count}");
-            // Console.WriteLine($"Events: {string.Join(", ", events.Select(e => e.eventId))}");
+            if (events.ContainsKey(id))
+                throw new System.Exception($"Event with id {id} already exists.");
+            if (!states.TryGetValue(stateId, out var state))
+                throw new System.Exception($"No state with id: {stateId} found.");
+            events[id] = new Event(id, state);
         }
+
         public void AddState(int id, int nrOfProducts, int catalogId)
         {
-            TestState s = new TestState(id, nrOfProducts, GetCatalogFromId(catalogId));
-            states.Add(s);
+            if (states.ContainsKey(id))
+                throw new System.Exception($"State with id {id} already exists.");
+            if (!catalogs.TryGetValue(catalogId, out var catalog))
+                throw new System.Exception($"No catalog with id: {catalogId} found.");
+            states[id] = new State(id, nrOfProducts, catalog);
         }
 
-        public void RemoveCatalog(int id)
+        public void RemoveCatalog(int catalogId)
         {
-            catalogs.Remove(GetCatalogFromId(id));
+            if (!catalogs.Remove(catalogId))
+                throw new System.Exception($"No catalog with id: {catalogId} found.");
         }
 
-        public void RemoveUser(int id)
+        public void RemoveUser(int userId)
         {
-            users.Remove(GetUsersFromId(id));
+            if (!users.Remove(userId))
+                throw new System.Exception($"No user with id: {userId} found.");
         }
 
-        public void RemoveEvent(int id)
+        public void RemoveEvent(int eventId)
         {
-            events.Remove(GetEventFromId(id));
+            if (!events.Remove(eventId))
+                throw new System.Exception($"No event with id: {eventId} found.");
         }
 
-        public void RemoveState(int id)
+        public void RemoveState(int stateId)
         {
-            states.Remove(GetStateFromId(id));
+            if (!states.Remove(stateId))
+                throw new System.Exception($"No state with id: {stateId} found.");
         }
 
         public void ChangeState(int stateId, int change)
         {
-            throw new NotImplementedException();
+            if (!states.TryGetValue(stateId, out var state))
+                throw new System.Exception($"No state with id: {stateId} found.");
+            state.nrOfProducts += change;
         }
 
-        public ICatalog? GetCatalog(int id)
-        {
-            return GetCatalogFromId(id);
-        }
-        public IUser? GetUser(int id)
-        {
-            return GetUsersFromId(id);
-        }
-        public IEvent? GetEvent(int id)
-        {
-            return GetEventFromId(id);
-        }
-        public IState? GetState(int id)
-        {
-            return GetStateFromId(id);
-        }
+        public ICatalog? GetCatalog(int id) => catalogs.TryGetValue(id, out var c) ? c : null;
+        public IUser? GetUser(int id) => users.TryGetValue(id, out var u) ? u : null;
+        public IEvent? GetEvent(int id) => events.TryGetValue(id, out var e) ? e : null;
+        public IState? GetState(int id) => states.TryGetValue(id, out var s) ? s : null;
 
         public void TruncateData()
         {
-            throw new NotImplementedException();
-        }
-
-        public List<ICatalog> GetAllCatalog()
-        {
-            List<ICatalog> catalogList = new List<ICatalog>();
-            foreach (TestCatalog catalog in catalogs)
-            {
-                if (catalog == null) continue;
-                
-                catalogList.Add(catalog);
-            }
-            return catalogList;
-        }
-        public List<IUser> GetAllUser()
-        {
-            List<IUser> userList = new List<IUser>();
-            foreach (TestUser user in users)
-            {
-                if (user == null) continue;
-                
-                userList.Add(user);
-            }
-            return userList;
-        }
-        public List<IEvent> GetAllEvent()
-        {
-            List<IEvent> eventList = new List<IEvent>();
-            foreach (TestEvent e in events)
-            {
-                if (e == null) continue;
-                
-                eventList.Add(e);
-            }
-            return eventList;
-        }
-        public List<IState> GetAllState()
-        {
-            List<IState> stateList = new List<IState>();
-            foreach (TestState state in states)
-            {
-                if (state == null) continue;
-                
-                stateList.Add(state);
-            }
-            return stateList;
-        }
-
-        TestUser GetUsersFromId(int id)
-        {
-            foreach (TestUser users in users)
-            {
-                if (users.id == id) return users;
-            }
-            return new TestUser(0, "username", "pass", "email", "phoneNumber");
-        }
-
-        TestEvent GetEventFromId(int id)
-        {
-            foreach (TestEvent e in events)
-            {
-                if (e.Id == id) return e;
-            }
-            return new TestEvent(0, new TestState(0, 1, new TestCatalog(0, "t", 1, "desc")));
-        }
-
-        TestState GetStateFromId(int id)
-        {
-            foreach (TestState state in states)
-            {
-                if (state.Id == id) return state;
-            }
-            return new TestState(0, 1, new TestCatalog(0, "t", 1, "desc"));
-        }
-
-        TestCatalog GetCatalogFromId(int id)
-        {
-            foreach (TestCatalog catalog in catalogs)
-            {
-                if (catalog.id == id) return catalog;
-            }
-            return new TestCatalog(0, "t", 1, "desc");
-        }
-        
-        public void CleanData()
-        {
             catalogs.Clear();
             users.Clear();
-            events.Clear();
             states.Clear();
+            events.Clear();
         }
     }
 }

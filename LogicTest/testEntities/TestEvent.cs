@@ -1,8 +1,9 @@
-﻿using Data.API.Entities;
+﻿using Data.Events;
+using Data.States;
 
 namespace LogicTest.testEntities
 {
-    internal class TestEvent : IEvent
+    internal class TestEvent : Event
     {
         public TestEvent(int eventId, TestState state)
         {
@@ -11,6 +12,6 @@ namespace LogicTest.testEntities
         }
 
         public int Id { get; set; }
-        public IState state { get; set; }
+        public TestState state { get; set; }
     }
 }

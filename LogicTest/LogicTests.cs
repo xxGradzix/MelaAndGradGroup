@@ -10,11 +10,12 @@ namespace LogicTest
         public void CatalogTests()
         {
             TestDataContext context = new TestDataContext();
+            // DataContext context = new DataContext()();
             DataService service = new DataService(context);
-            service.AddCatalog(0, "namer", 1, "desc");
-            Assert.IsTrue(service.GetCatalog(0).name == "namer");
-            Assert.IsTrue(service.GetCatalog(0).price == 1);
-            Assert.IsTrue(service.GetCatalog(0).description == "desc");
+            service.AddCatalog(1, "namer", 1, "desc");
+            Assert.AreEqual(service.GetCatalog(1).name, "namer");
+            Assert.IsTrue(service.GetCatalog(1).price == 1);
+            Assert.IsTrue(service.GetCatalog(1).description == "desc");
         }
         [Test]
         public void UserTests()

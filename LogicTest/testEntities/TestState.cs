@@ -1,11 +1,13 @@
 ﻿using Data.API.Entities;
+using Data.Catalogs;
+using Data.States;
 using Logic.Services.Interfaces;
 using LogicLayerTest;
 
 namespace LogicTest.testEntities
 
 {
-    internal class TestState : IState
+    internal class TestState : State
     {
         public TestState(int Id, int nrOfProducts, TestCatalog catalog)
         {
@@ -16,6 +18,6 @@ namespace LogicTest.testEntities
 
         public int Id { get; set; }
         public int nrOfProducts { get; set; }
-        public ICatalog catalog { get; set; }
+        public TestCatalog catalog { get; set; }
     }
 }
