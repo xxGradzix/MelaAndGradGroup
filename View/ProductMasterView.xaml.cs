@@ -11,5 +11,10 @@ namespace View
             DataContext = new CatalogListViewModel();  
 
         }
+
+        private void ProductDetailView_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
     }
 }
