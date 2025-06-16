@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Input;
+using Data.Events;
 using Model.Interfaces;
 
 namespace ViewModel
@@ -64,6 +66,20 @@ namespace ViewModel
             }
         }
 
+        private Event _selectedEvent;
+        public Event SelectedEvent
+        {
+            get => _selectedEvent;
+            set
+            {
+                if (_selectedEvent != value)
+                {
+                    _selectedEvent = value;
+                    OnPropertyChanged(nameof(SelectedEvent));
+                }
+            }
+        }
+
         public void add()
         {
             Events.Add(new EventViewModel(EventId, NrOfProducts));
@@ -96,6 +112,12 @@ namespace ViewModel
             {
                 Events.Add(new EventViewModel(EventId = item.eventId, NrOfProducts = item.nrOfProducts));
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

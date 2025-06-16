@@ -10,10 +10,10 @@
     </Window.DataContext>
     <Window.Resources>
         <DataTemplate DataType="{x:Type vmodel:CatalogListViewModel}">
-            <view1:ProductMasterView />
+            <view:ProductMasterView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vmodel:UserListViewModel}">
-            <view1:UserMasterView />
+            <view:UserMasterView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vmodel:EventListViewModel}">
             <view:EventMasterView />
