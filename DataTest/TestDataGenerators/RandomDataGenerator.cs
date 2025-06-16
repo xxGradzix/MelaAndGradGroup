@@ -2,7 +2,7 @@
 using Data.dataContextImpl;
 using Data.Users;
 
-namespace DataTest.TestDataGenerator
+namespace DataTest.TestDataGenerators
 {
     internal class RandomDataGenerator : IDataGenerator
     {
@@ -14,6 +14,27 @@ namespace DataTest.TestDataGenerator
             _data = new DataContext();
             GenerateProducts();
             GenerateUsers();
+            GenerateStates();
+            GenerateEvents();
+        }
+
+        private void GenerateStates()
+        {
+            for (int i = 1; i <= 5; i++)
+            {
+                int nrOfBooks = _random.Next(1, 100); // Random number of books between 1 and 100
+                _data.AddState(i, nrOfBooks, i);
+            }
+        }
+        
+        private void GenerateEvents()
+        {
+            
+            for (int i = 1; i <= 10; i++)
+            {
+                int stateId = _random.Next(1, 6); // Assuming states are indexed from 1 to 5
+                _data.AddEvent(i, stateId);
+            }
         }
 
         public IData GetData() => _data;

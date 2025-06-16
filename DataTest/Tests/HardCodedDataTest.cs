@@ -1,4 +1,4 @@
-﻿using DataTest.TestDataGenerator;
+﻿using DataTest.TestDataGenerators;
 
 namespace DataTest.Tests
 {

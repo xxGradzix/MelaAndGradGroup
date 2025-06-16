@@ -1,6 +1,6 @@
 ﻿using Data.API;
 
-namespace DataTest.TestDataGenerator
+namespace DataTest.TestDataGenerators
 {
     public interface IDataGenerator
     {
