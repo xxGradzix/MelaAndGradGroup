@@ -26,17 +26,17 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,5">
             <TextBlock Text="Password:" Width="100"/>
-            <TextBox Text="{Binding Password}" Width="200"/>
+            <TextBox Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="0,5">
             <TextBlock Text="Email:" Width="100"/>
-            <TextBox Text="{Binding Email}" Width="200"/>
+            <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="4" Margin="0,5">
             <TextBlock Text="Phone:" Width="100"/>
-            <TextBox Text="{Binding PhoneNumber}" Width="200"/>
+            <TextBox Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
         </StackPanel>
     </Grid>
 </UserControl>

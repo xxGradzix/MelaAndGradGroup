@@ -32,6 +32,5 @@
             <TextBlock Text="Description:" Width="100"/>
             <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
         </StackPanel>
-
     </Grid>
 </UserControl>
