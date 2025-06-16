@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:View"
              xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
              Height="Auto" Width="Auto">
+    
     <UserControl.DataContext>
         <vm:CatalogListViewModel/>
     </UserControl.DataContext>

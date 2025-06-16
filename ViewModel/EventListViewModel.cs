@@ -66,19 +66,19 @@ namespace ViewModel
             }
         }
 
-        private Event _selectedEvent;
-        public Event SelectedEvent
-        {
-            get => _selectedEvent;
-            set
-            {
-                if (_selectedEvent != value)
-                {
-                    _selectedEvent = value;
-                    OnPropertyChanged(nameof(SelectedEvent));
-                }
-            }
-        }
+        // private Event _selectedEvent;
+        // public Event SelectedEvent
+        // {
+        //     get => _selectedEvent;
+        //     set
+        //     {
+        //         if (_selectedEvent != value)
+        //         {
+        //             _selectedEvent = value;
+        //             OnPropertyChanged(nameof(SelectedEvent));
+        //         }
+        //     }
+        // }
 
         public void add()
         {
@@ -114,10 +114,10 @@ namespace ViewModel
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        // public event PropertyChangedEventHandler PropertyChanged;
+        // protected void OnPropertyChanged(string propertyName)
+        // {
+        //     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        // }
     }
 }
