@@ -2,7 +2,6 @@
 using Data.Catalogs;
 using Data.States;
 using Logic.Services.Interfaces;
-using LogicLayerTest;
 
 namespace LogicTest.testEntities
 

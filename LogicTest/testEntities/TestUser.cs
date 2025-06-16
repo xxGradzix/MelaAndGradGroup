@@ -1,6 +1,6 @@
 ﻿using Data.API.Entities;
 
-namespace LogicLayerTest
+namespace LogicTest.testEntities
 {
     internal class TestUser : IUser
     {

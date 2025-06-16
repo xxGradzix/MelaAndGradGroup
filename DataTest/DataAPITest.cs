@@ -3,7 +3,7 @@ using Data.dataContextImpl;
 
 namespace DataTest;
 
-public class DataAPITest
+public class DataTest
 {
 
     [Test]

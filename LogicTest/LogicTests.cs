@@ -1,6 +1,5 @@
 ﻿using Logic;
 using Logic.Services;
-using LogicLayerTest;
 
 namespace LogicTest
 {

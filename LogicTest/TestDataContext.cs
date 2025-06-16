@@ -5,8 +5,6 @@ using Data.Catalogs;
 using Data.Events;
 using Data.States;
 using Data.Users;
-using LogicLayerTest;
-using LogicTest.testEntities;
 
 namespace LogicTest
 {
