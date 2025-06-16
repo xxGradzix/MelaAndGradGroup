@@ -1,13 +1,9 @@
-﻿using Data.Events;
-using Data.Users;
-using Data.Catalogs;
-using Data.States;
-using Model.Interfaces;
+﻿using Model.Interfaces;
 using Logic.Services.Interfaces;
 
 namespace Model
 {
-    internal class DataModel : IDataModel
+    internal class DataModel : IDataModel, IDisposable
     {
         private static IDataService _service;
         private string context = "";
@@ -20,6 +16,14 @@ namespace Model
         public DataModel(IDataService service)
         {
             _service = service;
+        }
+
+        public void Dispose()
+        {
+            if (_service is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
         }
 
         private ICatalogModel Convert(ICatalogService c) => new CatalogModel(c.id, c.name, c.price, c.description);
