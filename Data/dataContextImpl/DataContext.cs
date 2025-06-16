@@ -9,14 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.dataContextImpl
 {
-    internal class DataContext : IData
+    internal class DataContext : IData, IDisposable
     {
-        // internal Dictionary<int, Catalog> catalogs { get; } = new Dictionary<int, Catalog>();
-        // internal List<Event> events { get; } = new List<Event>();
-        // internal List<User> users { get; } = new List<User>();
-        // internal List<State> states { get; } = new List<State>();
-
-
         private AppDbContext _context;
         
         private DbContextOptions<AppDbContext> GetInMemoryOptions()
@@ -204,27 +198,16 @@ namespace Data.dataContextImpl
             State s = new State(id, nrOfProducts, (Catalog)GetCatalog(catalogId));
             // states.Add(s);
             _context.States.Add(s);
-            // Console.WriteLine("State added with ID: " + s.Id);
-            // Console.WriteLine("State : " + GetAllState()) ;
             
             _context.SaveChanges();
         }
 
         public void RemoveCatalog(int catalogId)
         {
-            // if (catalogs.ContainsKey(catalogId))
-            // {
-            //     catalogs.Remove(catalogId);
-            // }
-            // else
-            // {
-            //     throw new Exception("No catalog with id: " + catalogId + " found in database.");
-            // }
             if (!GetCatalog(catalogId).Equals(null))
             {
                 _context.Products.Remove((Catalog)GetCatalog(catalogId));
                 _context.SaveChanges();
-                // catalogs.Remove(catalogId);
             }
             else
             {

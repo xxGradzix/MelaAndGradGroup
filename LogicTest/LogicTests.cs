@@ -37,7 +37,6 @@ namespace LogicTest
             service.AddEvent(0, 0);
             var eventService = service.GetEvent(0);
             
-            Console.WriteLine(eventService.stateId);
 
             Assert.IsTrue(eventService.stateId == service.GetState(0).stateId);
         }
