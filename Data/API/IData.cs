@@ -39,10 +39,10 @@ namespace Data.API
             return new DataContext();
         }
 
-        // public static IData CreateNewContext(string connectionString)
-        // {
-        //     return new DataContext(connectionString);
-        // }
+        public static IData CreateNewContext(string connectionString)
+        {
+            return new DataContext(connectionString);
+        }
         
     }
 }

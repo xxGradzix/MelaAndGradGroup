@@ -20,7 +20,7 @@ namespace DataTest
         {
             Catalog c = new Catalog(1, "test", 1234, "desc");
             State s = new State(1, 10, c);
-            Assert.IsTrue(s.stateId == 1 && s.catalog == c);
+            Assert.IsTrue(s.Id == 1 && s.catalog == c);
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace DataTest
             Catalog c = new Catalog(1, "test", 1234, "desc");
             State s = new State(1, 10, c);
             Event e = new Event(1, s);
-            Assert.IsTrue(e.eventId == 1 && e.state == s);
+            Assert.IsTrue(e.Id == 1 && e.state == s);
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace DataTest
             User u = new User(1, "Marcin", "test1234", "mail.mail.com", "123456789");
             State s = new State(1, 10, c);
             Event e = new Event(1, s);
-            Assert.IsTrue(e.eventId == 1 && e.state == s);
+            Assert.IsTrue(e.Id == 1 && e.state == s);
         }
 
         [Test]
@@ -48,7 +48,7 @@ namespace DataTest
             Catalog c = new Catalog(1, "test", 1234, "desc");
             State s = new State(1, 10, c);
             Event e = new Event(1, s);
-            Assert.IsTrue(e.eventId == 1 && e.state == s);
+            Assert.IsTrue(e.Id == 1 && e.state == s);
         }
 
         [Test]

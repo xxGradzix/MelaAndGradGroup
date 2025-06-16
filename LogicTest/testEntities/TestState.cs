@@ -7,11 +7,15 @@ namespace LogicTest.testEntities
 {
     internal class TestState : IState
     {
-        public TestState(int stateId, int nrOfProducts, TestCatalog catalog)
+        public TestState(int Id, int nrOfProducts, TestCatalog catalog)
         {
-            this.stateId = stateId;
+            this.Id = Id;
             this.nrOfProducts = nrOfProducts;
             this.catalog = catalog;
         }
+
+        public int Id { get; set; }
+        public int nrOfProducts { get; set; }
+        public ICatalog catalog { get; set; }
     }
 }

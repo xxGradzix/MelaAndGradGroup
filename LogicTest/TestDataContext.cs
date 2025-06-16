@@ -151,7 +151,7 @@ namespace LogicTest
         {
             foreach (TestEvent e in events)
             {
-                if (e.eventId == id) return e;
+                if (e.Id == id) return e;
             }
             return new TestEvent(0, new TestState(0, 1, new TestCatalog(0, "t", 1, "desc")));
         }
@@ -160,7 +160,7 @@ namespace LogicTest
         {
             foreach (TestState state in states)
             {
-                if (state.stateId == id) return state;
+                if (state.Id == id) return state;
             }
             return new TestState(0, 1, new TestCatalog(0, "t", 1, "desc"));
         }

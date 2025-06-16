@@ -6,8 +6,11 @@ namespace LogicTest.testEntities
     {
         public TestEvent(int eventId, TestState state)
         {
-            this.eventId = eventId;
+            this.Id = eventId;
             this.state = state;
         }
+
+        public int Id { get; set; }
+        public IState state { get; set; }
     }
 }

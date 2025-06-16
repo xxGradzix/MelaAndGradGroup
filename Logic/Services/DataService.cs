@@ -21,8 +21,8 @@ namespace Logic.Services
         
         private CatalogService CatalogServiceConversion(ICatalog c) => new CatalogService(c.id, c.name, c.price, c.description);
         private UserService UserServiceConversion(IUser c) => new UserService(c.id, c.username, c.password, c.email, c.phoneNumber);
-        private EventService EventServiceConversion(IEvent c) => new EventService(c.eventId, c.state.stateId);
-        private StateService StateServiceConversion(IState c) => new StateService(c.stateId, c.nrOfProducts, c.catalog.id);
+        private EventService EventServiceConversion(IEvent c) => new EventService(c.Id, c.state.Id);
+        private StateService StateServiceConversion(IState c) => new StateService(c.Id, c.nrOfProducts, c.catalog.id);
 
         public void AddCatalog(int id, string name, int price, string description)
         {

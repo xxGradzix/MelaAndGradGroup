@@ -5,12 +5,14 @@ namespace Data.Events
 {
     internal class Event : IEvent
     {
-        public int eventId {  get; set; }
-        public IState state {  get; set; }
+        public int Id {  get; set; }
+        public State state {  get; set; }
 
-        public Event(int eventId, IState state)
+        public Event() { } 
+        
+        public Event(int Id, State state)
         {
-            this.eventId = eventId;
+            this.Id = Id;
             this.state = state;
         }
     }

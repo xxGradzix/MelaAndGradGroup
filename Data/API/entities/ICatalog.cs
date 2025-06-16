@@ -1,6 +1,8 @@
-﻿namespace Data.API.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Data.API.Entities
 {
-    public abstract class ICatalog
+    public interface ICatalog
     {
         public int id { get; set; }
 

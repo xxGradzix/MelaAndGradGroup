@@ -3,13 +3,22 @@ using Data.Catalogs;
 
 namespace Data.States
 {
-    internal class State: IState
+    public class State: IState
     {
-        public State(int stateId, int nrOfProducts, ICatalog catalog)
+        
+        public int Id { get; set; }
+        public int nrOfProducts { get; set; }
+        public Catalog catalog { get; set; }
+        
+        public State(int Id, int nrOfProducts, Catalog catalog)
         {
-            this.stateId = stateId;
+            this.Id = Id;
             this.nrOfProducts = nrOfProducts;
             this.catalog = catalog;
+        }
+        
+        public State()
+        {
         }
     }
 }
