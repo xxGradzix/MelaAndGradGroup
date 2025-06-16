@@ -17,6 +17,9 @@
         <DataTemplate DataType="{x:Type vmodel:EventListViewModel}">
             <view:EventMasterView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vmodel:StateListViewModel}">
+            <view:StateMasterView />
+        </DataTemplate>
     </Window.Resources>
 
     <DockPanel>

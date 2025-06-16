@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="View.StateDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
+             Height="Auto" Width="Auto">
+    <UserControl.DataContext>
+        <vm:StateViewModel/>
+    </UserControl.DataContext>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="State details" FontSize="16" FontWeight="Bold" Margin="0,0,0,10" Grid.Row="0"/>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,5">
+            <TextBlock Text="StateId:" Width="100"/>
+            <TextBox Text="{Binding StateId, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,5">
+            <TextBlock Text="NrOfProducts:" Width="100"/>
+            <TextBox Text="{Binding NrOfProducts, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="4" Margin="0,5">
+            <TextBlock Text="CatalogId:" Width="100"/>
+            <TextBox Text="{Binding CatalogId, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+        </StackPanel>
+
+    </Grid>
+</UserControl>
