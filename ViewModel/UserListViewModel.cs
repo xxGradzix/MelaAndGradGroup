@@ -1,11 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Model.Interfaces;
-using ViewModel;
 
-namespace Presentation.ViewModel
+namespace ViewModel
 {
-    internal class UserListViewModel : PropertyChange
+    public class UserListViewModel : PropertyChange
     {
         private IDataModel data;
         private int _id;

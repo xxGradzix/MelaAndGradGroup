@@ -1,5 +1,4 @@
-﻿using Presentation.ViewModel;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace ViewModel
 {

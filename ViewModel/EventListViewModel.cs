@@ -4,7 +4,7 @@ using Model.Interfaces;
 
 namespace ViewModel
 {
-    internal class EventListViewModel : PropertyChange
+    public class EventListViewModel : PropertyChange
     {
         private IDataModel data;
         private int _eventId;

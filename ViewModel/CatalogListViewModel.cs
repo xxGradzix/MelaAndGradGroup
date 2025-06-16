@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace ViewModel
 {
-    internal class CatalogListViewModel : PropertyChange
+    public class CatalogListViewModel : PropertyChange
     {
         private IDataModel data;
         private int _id;

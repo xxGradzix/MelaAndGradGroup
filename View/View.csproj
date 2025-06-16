@@ -12,4 +12,7 @@
     <ProjectReference Include="..\ViewModel\ViewModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="View" />
+  </ItemGroup>
 </Project>

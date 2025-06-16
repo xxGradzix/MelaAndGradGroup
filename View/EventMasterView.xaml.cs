@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Presentation.View
+namespace View
 {
     public partial class EventMasterView : UserControl
     {

@@ -2,7 +2,7 @@
 
 namespace ViewModel
 {
-    internal class UserViewModel : PropertyChange, IUserModel
+    public class UserViewModel : PropertyChange, IUserModel
     {
         public int id { get; set; }
         public string username { get; set; }

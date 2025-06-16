@@ -2,7 +2,7 @@
 
 namespace ViewModel
 {
-    internal class CatalogViewModel : PropertyChange, ICatalogModel
+    public class CatalogViewModel : PropertyChange, ICatalogModel
     {
         public int id { get; set; }
         public string name { get; set; }
