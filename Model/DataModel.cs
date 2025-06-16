@@ -5,7 +5,7 @@ using Data.States;
 using Model.Interfaces;
 using Logic.Services.Interfaces;
 
-namespace Data.dataContextImpl
+namespace Model
 {
     internal class DataModel : IDataModel
     {
@@ -117,18 +117,6 @@ namespace Data.dataContextImpl
         {
             var state = _service.GetState(id);
             return state == null ? null : Convert(state);
-        }
-
-        public void ChangeState(int stateId, int change)
-        {
-            if (context == "") return;
-            _service.ChangeState(stateId, change);
-        }
-
-        public void TruncateData()
-        {
-            if (context == "") return;
-            _service.TruncateData();
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Data.API.Entities;
 using Model.Interfaces;
 using ViewModel;
 
@@ -115,7 +114,7 @@ namespace Presentation.ViewModel
         public void load()
         {
             Users.Clear();
-            foreach (var user in data.GetAllUsers())
+            foreach (var user in data.GetAllUser())
             {
                 Users.Add(new UserViewModel(Id = user.id, Username = user.username, Password = user.password, Email = user.email, PhoneNumber = user.phoneNumber));
             }

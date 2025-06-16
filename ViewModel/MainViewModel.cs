@@ -1,6 +1,5 @@
 ﻿using Presentation.ViewModel;
 using System.Windows.Input;
-using ViewModel.zrobione;
 
 namespace ViewModel
 {
@@ -30,10 +29,10 @@ namespace ViewModel
         public MainViewModel()
         {
             SelectedViewModel = new CatalogListViewModel();
-            ShowCatalogViewCommand = new RelayCommand(_ => ShowProductView());
-            ShowUserViewCommand = new RelayCommand(_ => ShowUserView());
-            ShowEventViewCommand = new RelayCommand(_ => ShowEventView());
-            ShowStateViewCommand = new RelayCommand(_ => ShowStateView());
+            ShowCatalogViewCommand = new RelayCommand(() => ShowProductView());
+            ShowUserViewCommand = new RelayCommand(() => ShowUserView());
+            ShowEventViewCommand = new RelayCommand(() => ShowEventView());
+            ShowStateViewCommand = new RelayCommand(() => ShowStateView());
         }   
 
         private void ShowProductView()

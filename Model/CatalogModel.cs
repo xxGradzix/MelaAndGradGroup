@@ -1,6 +1,6 @@
 ﻿using Model.Interfaces;
 
-namespace Data.Catalogs
+namespace Model
 {
     internal class CatalogModel: ICatalogModel
     {

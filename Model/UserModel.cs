@@ -1,6 +1,6 @@
 ﻿using Model.Interfaces;
 
-namespace Data.Users
+namespace Model
 {
     internal class UserModel : IUserModel
     {

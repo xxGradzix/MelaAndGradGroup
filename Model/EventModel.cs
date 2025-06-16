@@ -1,7 +1,7 @@
 using Data.States;
 using Model.Interfaces;
 
-namespace Data.Events
+namespace Model
 {
     internal class EventModel : IEventModel
     {

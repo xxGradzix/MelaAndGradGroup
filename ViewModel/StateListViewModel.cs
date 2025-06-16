@@ -1,5 +1,4 @@
-﻿using Data.API.Entities;
-using Model.Interfaces;
+﻿using Model.Interfaces;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 

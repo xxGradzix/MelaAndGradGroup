@@ -1,10 +1,6 @@
-﻿
-using Data.API.Entities;
-using Model.Interfaces;
+﻿using Model.Interfaces;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Windows.Input;
-using System.Xml.Linq;
 
 namespace ViewModel
 {

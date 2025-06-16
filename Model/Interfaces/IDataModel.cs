@@ -24,11 +24,6 @@ namespace Model.Interfaces
         public IEventModel? GetEvent(int id);
         public IStateModel? GetState(int id);
 
-        public void ChangeState(int stateId, int change);
-
-        public void TruncateData();
-
-
         public static IDataModel CreateNewDataModel()
         {
             return new DataModel();

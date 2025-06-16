@@ -1,7 +1,7 @@
 ﻿using Data.Catalogs;
 using Model.Interfaces;
 
-namespace Data.States
+namespace Model
 {
     internal class StateModel: IStateModel
     {
