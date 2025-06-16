@@ -3,114 +3,132 @@ using Data.Users;
 using Data.Catalogs;
 using Data.States;
 using Model.Interfaces;
+using Logic.Services.Interfaces;
 
 namespace Data.dataContextImpl
 {
     internal class DataModel : IDataModel
     {
-        internal List<CatalogModel> catalogs { get; } = new List<CatalogModel>();
-        internal List<EventModel> events { get; } = new List<EventModel>();
-        internal List<UserModel> users { get; } = new List<UserModel>();
-        internal List<StateModel> states { get; } = new List<StateModel>();
+        private static IDataService _service;
+        private string context = "";
 
-        //public bool DeleteUser(Guid id)
-        //{
-        //    return users.Remove(id);
-        //}
-
-
-        //public bool DeleteCatalog(Guid id)
-        //{
-        //    return products.Remove(id);
-        //}
-
-        public override void AddCatalog(string name, double price, string description)
+        public DataModel()
         {
-            CatalogModel c = new CatalogModel(catalogs.Count, name, price, description);
-            catalogs.Add(c);
-        }
-        public override void AddUser(string username, string password, string email, string phoneNumber)
-        {
-            UserModel u = new UserModel(users.Count, username, password, email, phoneNumber);
-            users.Add(u);
-        }
-        public override void AddState(int nrOfProducts, int catalogId)
-        {
-            StateModel s = new StateModel(states.Count, nrOfProducts, GetCatalogFromId(catalogId));
-            states.Add(s);
+            _service = IDataService.CreateNewDataService();
         }
 
-
-        public override void AddUserEvent(int stateId, int userId)
+        public DataModel(IDataService service)
         {
-            UserEvent e = new UserEvent(events.Count, GetStateFromId(stateId), GetUserFromId(userId));
-            events.Add(e);
-        }
-        public override void AddDatabaseEvent(int stateId)
-        {
-            DatabaseEvent e = new DatabaseEvent(events.Count, GetStateFromId(stateId));
-            events.Add(e);
+            _service = service;
         }
 
-        public override void ChangeState(int stateId, int change)
+        private ICatalogModel Convert(ICatalogService c) => new CatalogModel(c.id, c.name, c.price, c.description);
+        private IUserModel Convert(IUserService u) => new UserModel(u.id, u.username, u.password, u.email, u.phoneNumber);
+        private IEventModel Convert(IEventService e) => new EventModel(e.id, e.stateId);
+        private IStateModel Convert(IStateService s) => new StateModel(s.stateId, s.nrOfProducts, s.catalogId);
+
+        public List<ICatalogModel> GetAllCatalog()
         {
-            GetStateFromId(stateId).nrOfProducts += change;
+            return _service.GetAllCatalog().Select(Convert).ToList();
         }
 
-        public override IUserModel GetUserFromId(int id)
+        public List<IUserModel> GetAllUser()
         {
-            foreach (UserModel users in users)
-            {
-                if (users.id == id) return users;
-            }
-            throw new Exception("No user with id: " + id + " found in database.");
+            return _service.GetAllUser().Select(Convert).ToList();
         }
 
-        public override IEventModel GetEventFromId(int id)
+        public List<IEventModel> GetAllEvent()
         {
-            foreach (EventModel e in events)
-            {
-                if (e.eventId == id) return e;
-            }
-            throw new Exception("No event with id: " + id + " found in database.");
+            return _service.GetAllEvent().Select(Convert).ToList();
         }
 
-        public override IStateModel GetStateFromId(int id)
+        public List<IStateModel> GetAllState()
         {
-            foreach (StateModel state in states)
-            {
-                if (state.stateId == id) return state;
-            }
-            throw new Exception("No state with id: " + id + " found in database.");
+            return _service.GetAllState().Select(Convert).ToList();
         }
 
-        public override ICatalogModel GetCatalogFromId(int id)
+        public void AddCatalog(int id, string name, double price, string description)
         {
-            foreach (CatalogModel catalog in catalogs)
-            {
-                if (catalog.id == id) return catalog;
-            }
-            throw new Exception("No catalog with id: " + id + " found in database.");
+            if (context == "") return;
+            _service.AddCatalog(id, name, price, description);
         }
 
-        public override List<IUserModel> GetUsers()
+        public void AddUser(int id, string username, string password, string email, string phoneNumber)
         {
-            List<IUserModel> userList = new List<IUserModel>();
-            foreach (UserModel user in users)
-            {
-                userList.Add(user);
-            }
-            return userList;
+            if (context == "") return;
+            _service.AddUser(id, username, password, email, phoneNumber);
         }
 
-        public override List<ICatalogModel> getProducts()
+        public void AddEvent(int id, int stateId)
         {
-            List<ICatalogModel> catalogList = new List<ICatalogModel>();
-            foreach (CatalogModel catalog in catalogs)
-            {
-                catalogList.Add(catalog);
-            }
-            return catalogList;
+            if (context == "") return;
+            _service.AddEvent(id, stateId);
+        }
+
+        public void AddState(int id, int nrOfProducts, int catalogId)
+        {
+            if (context == "") return;
+            _service.AddState(id, nrOfProducts, catalogId);
+        }
+
+        public void RemoveCatalog(int catalogId)
+        {
+            if (context == "") return;
+            _service.RemoveCatalog(catalogId);
+        }
+
+        public void RemoveUser(int userId)
+        {
+            if (context == "") return;
+            _service.RemoveUser(userId);
+        }
+
+        public void RemoveEvent(int eventId)
+        {
+            if (context == "") return;
+            _service.RemoveEvent(eventId);
+        }
+
+        public void RemoveState(int stateId)
+        {
+            if (context == "") return;
+            _service.RemoveState(stateId);
+        }
+
+        public ICatalogModel? GetCatalog(int id)
+        {
+            var catalog = _service.GetCatalog(id);
+            return catalog == null ? null : Convert(catalog);
+        }
+
+        public IUserModel? GetUser(int id)
+        {
+            var user = _service.GetUser(id);
+            return user == null ? null : Convert(user);
+        }
+
+        public IEventModel? GetEvent(int id)
+        {
+            var ev = _service.GetEvent(id);
+            return ev == null ? null : Convert(ev);
+        }
+
+        public IStateModel? GetState(int id)
+        {
+            var state = _service.GetState(id);
+            return state == null ? null : Convert(state);
+        }
+
+        public void ChangeState(int stateId, int change)
+        {
+            if (context == "") return;
+            _service.ChangeState(stateId, change);
+        }
+
+        public void TruncateData()
+        {
+            if (context == "") return;
+            _service.TruncateData();
         }
     }
 }

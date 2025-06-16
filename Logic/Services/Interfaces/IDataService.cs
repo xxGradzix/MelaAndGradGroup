@@ -4,7 +4,7 @@ namespace Logic.Services.Interfaces
 {
     public interface IDataService
     {
-        public void AddCatalog(int id, string name, int price, string description);
+        public void AddCatalog(int id, string name, double price, string description);
         public void AddUser(int id, string username, string password, string email, string phoneNumber);
         public void AddEvent(int id, int stateId);
         public void AddState(int id, int nrOfBooks, int catalogId);
@@ -24,7 +24,7 @@ namespace Logic.Services.Interfaces
         public List<IEventService> GetAllEvent();
         public List<IStateService> GetAllState();
 
-        public void UpdateCatalog(int id, string name, int price, string description);
+        public void UpdateCatalog(int id, string name, double price, string description);
         public void UpdateUser(int id, string username, string password, string email, string phoneNumber);
         public void UpdateEvent(int id, int stateId);
         public void UpdateState(int id, int nrOfProducts, int catalogId);

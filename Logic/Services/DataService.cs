@@ -24,7 +24,7 @@ namespace Logic.Services
         private EventService EventServiceConversion(IEvent c) => new EventService(c.Id, c.state.Id);
         private StateService StateServiceConversion(IState c) => new StateService(c.Id, c.nrOfProducts, c.catalog.id);
 
-        public void AddCatalog(int id, string name, int price, string description)
+        public void AddCatalog(int id, string name, double price, string description)
         {
             _context.AddCatalog(id, name, price, description);
         }
@@ -125,7 +125,7 @@ namespace Logic.Services
         
         
         
-        public void UpdateCatalog(int id, string name,int price, string description)
+        public void UpdateCatalog(int id, string name, double price, string description)
         {
             _context.RemoveCatalog(id);
             _context.AddCatalog(id, name, price, description);

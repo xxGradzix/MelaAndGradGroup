@@ -1,34 +1,41 @@
-﻿using Data.Catalogs;
-using Data.dataContextImpl;
-using Data.Events;
-using Data.States;
-using Logic.Services.Interfaces;
+﻿using Logic.Services.Interfaces;
 
 namespace Model.Interfaces
 {
     public interface IDataModel
     {
-        public abstract void AddCatalog(string name, double price, string description);
-        public abstract void AddUser(string username, string password, string email, string phoneNumber);
-        public abstract void AddUserEvent(int stateId, int userId);
-        public abstract void AddDatabaseEvent(int stateId);
-        public abstract void AddState(int nrOfProducts, int catalogId);
-        public abstract void ChangeState(int stateId, int change);
-        
-        public abstract IUserModel GetUserFromId(int id);
-        public abstract IEventModel GetEventFromId(int id);
-        public abstract IStateModel GetStateFromId(int id);
-        public abstract ICatalogModel GetCatalogFromId(int id);
-        public abstract List<IUserModel> GetUsers();
-        public abstract List<ICatalogModel> getProducts();
+        public List<ICatalogModel> GetAllCatalog();
+        public List<IUserModel> GetAllUser();
+        public List<IEventModel> GetAllEvent();
+        public List<IStateModel> GetAllState();
+
+        public void AddCatalog(int id, string name, double price, string description);
+        public void AddUser(int id, string username, string password, string email, string phoneNumber);
+        public void AddEvent(int id, int stateId);
+        public void AddState(int id, int nrOfProducts, int catalogId);
+
+        public void RemoveCatalog(int catalogId);
+        public void RemoveUser(int userId);
+        public void RemoveEvent(int eventId);
+        public void RemoveState(int stateId);
+
+        public ICatalogModel? GetCatalog(int id);
+        public IUserModel? GetUser(int id);
+        public IEventModel? GetEvent(int id);
+        public IStateModel? GetState(int id);
+
+        public void ChangeState(int stateId, int change);
+
+        public void TruncateData();
+
 
         public static IDataModel CreateNewDataModel()
         {
             return new DataModel();
         }
-        public static IDataModel CreateNewDataModel(IDataService s)
+        public static IDataModel CreateNewDataModel(IDataService service)
         {
-            return new DataModel(s);
+            return new DataModel(service);
         }
     }
 }
