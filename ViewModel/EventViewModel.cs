@@ -11,7 +11,7 @@ namespace ViewModel
             get => eventId;
             set { eventId = value; OnPropertyChanged(nameof(EventId)); }
         }
-        public int NrOfBooks
+        public int NrOfProducts
         {
             get => nrOfProducts;
             set { nrOfProducts = value; OnPropertyChanged(nameof(nrOfProducts)); }

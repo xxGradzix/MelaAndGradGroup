@@ -3,12 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:ViewModel"
+             xmlns:local="clr-namespace:View"
+             xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
              xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
              mc:Ignorable="d">
 
     <UserControl.DataContext>
-        <viewModel:EventListViewModel />
+        <vm:EventListViewModel />
     </UserControl.DataContext>
 
     <Grid Margin="10">
@@ -19,7 +20,6 @@
 
         <ListBox ItemsSource="{Binding Events}"
                  SelectedItem="{Binding SelectedEvent}"
-                 DisplayMemberPath="Timestamp"
                  Grid.Column="0"
                  Margin="5"/>
 
@@ -27,14 +27,17 @@
             <TextBlock Text="Event details" FontWeight="Bold" FontSize="16" Margin="0 0 0 10"/>
 
             <TextBlock Text="Event ID:" FontWeight="SemiBold"/>
-            <TextBox Text="{Binding SelectedEvent.EventId}" IsReadOnly="True" Margin="0 0 0 10"/>
+            <TextBox Text="{Binding EventId}" Margin="0 0 0 10"/>
 
-            <TextBlock Text="Timestamp:" FontWeight="SemiBold"/>
-            <TextBox Text="{Binding SelectedEvent.Timestamp}" IsReadOnly="True" Margin="0 0 0 10"/>
+            <TextBlock Text="Number of products:" FontWeight="SemiBold"/>
+            <TextBox Text="{Binding NrOfProducts}" Margin="0 0 0 10"/>
+
 
             <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
-                <Button Content="Dodaj" Command="{Binding AddEventCommand}" Width="100" Margin="0 0 10 0"/>
-                <Button Content="Usuń" Command="{Binding RemoveEventCommand}" Width="100"/>
+                <Button Content="Add" Command="{Binding AddCommand}" Width="100" Margin="0 0 10 0"/>
+                <Button Content="Remove" Command="{Binding RemoveCommand}" Width="100" Margin="0 0 10 0"/>
+                <Button Content="Load" Command="{Binding LoadCommand}" Width="100" Margin="0 0 10 0"/>
+                <Button Content="Update" Command="{Binding UpdateCommand}" Width="100"/>
             </StackPanel>
         </StackPanel>
     </Grid>
