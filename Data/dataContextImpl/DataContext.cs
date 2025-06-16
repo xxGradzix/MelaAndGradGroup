@@ -9,7 +9,7 @@ namespace Data.dataContextImpl
 {
     internal class DataContext : IData
     {
-        internal List<Catalog> catalogs { get; } = new List<Catalog>();
+        internal Dictionary<int, Catalog> catalogs { get; } = new Dictionary<int, Catalog>();
         internal List<Event> events { get; } = new List<Event>();
         internal List<User> users { get; } = new List<User>();
         internal List<State> states { get; } = new List<State>();
@@ -117,7 +117,7 @@ namespace Data.dataContextImpl
         // }
         public List<ICatalog> GetAllCatalog()
         {
-            return catalogs.Cast<ICatalog>().ToList();
+            return catalogs.Values.Cast<ICatalog>().ToList();
         }
 
         public List<IUser> GetAllUser()
@@ -137,8 +137,15 @@ namespace Data.dataContextImpl
 
         public void AddCatalog(int id, string name, double price, string description)
         {
-            Catalog c = new Catalog(id, name, price, description);
-            catalogs.Add(c);
+            if (!catalogs.ContainsKey(id))
+            {
+                Catalog c = new Catalog(id, name, price, description);
+                catalogs.Add(id, c);
+            }
+            else
+            {
+                throw new Exception($"Catalog with id {id} already exists.");
+            }
         }
 
         public void AddUser(int id, string username, string password, string email, string phoneNumber)
@@ -162,10 +169,9 @@ namespace Data.dataContextImpl
 
         public void RemoveCatalog(int catalogId)
         {
-            var catalog = GetCatalog(catalogId);
-            if (catalog != null)
+            if (catalogs.ContainsKey(catalogId))
             {
-                catalogs.Remove((Catalog)catalog);
+                catalogs.Remove(catalogId);
             }
             else
             {
@@ -227,7 +233,11 @@ namespace Data.dataContextImpl
 
         public ICatalog? GetCatalog(int id)
         {
-            return catalogs.FirstOrDefault(c => c.id == id);
+            if (catalogs.TryGetValue(id, out var catalog))
+            {
+                return catalog;
+            }
+            return null;
         }
 
         public IUser? GetUser(int id)

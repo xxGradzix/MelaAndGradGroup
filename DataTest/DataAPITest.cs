@@ -15,7 +15,7 @@ public class DataAPITest
         string desc = "Desc"; 
         int price = 12;
         context.AddCatalog(1, name, price, desc);
-        Assert.IsTrue(context.catalogs[0].name == name);
+        Assert.IsTrue(context.catalogs[1].name == name);
     }
 
     [Test]
@@ -42,7 +42,7 @@ public class DataAPITest
         int nrOfProducts = 123;
         int catalogId = 0; 
         context.AddState(1, nrOfProducts, catalogId);
-        Assert.IsTrue(context.catalogs[0].name == name);
+        Assert.IsTrue(context.catalogs[1].name == name);
     }
 
     [Test]
