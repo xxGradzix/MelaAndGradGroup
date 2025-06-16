@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using ViewModel;
 
 namespace View
 {
@@ -7,6 +8,8 @@ namespace View
         public UserMasterView()
         {
             InitializeComponent();
+            DataContext = new UserListViewModel();  
+
         }
     }
 }
