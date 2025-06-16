@@ -391,5 +391,12 @@ namespace Data.dataContextImpl
             _context.States.RemoveRange(_context.States);
             _context.SaveChanges();
         }
+
+        public void Dispose()
+        {
+            _context.Dispose();
+            _context = null;
+        }
+
     }
 }

@@ -46,8 +46,6 @@ namespace View
                 db.Database.EnsureCreated();
             }
             
-            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
         }
     }
         

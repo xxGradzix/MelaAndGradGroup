@@ -8,25 +8,6 @@ namespace DataTest.Tests
     {
         private static string testConnectionString;
 
-        // [SetUp]
-        // public static void ClassInitialize(TestContext context)
-        // {
-        //     string relativePath = @"Database\LibraryLINQDatabaseTest.mdf";
-        //     string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-        //     string dbPath = Path.Combine(baseDir, relativePath);
-        //
-        //     Assert.IsTrue(File.Exists(dbPath), $"Database file not found at: {dbPath}");
-        //
-        //     testConnectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={dbPath};Integrated Security=True;Connect Timeout=30;";
-        // }
-
-        // [SetUp]
-        // public void TestInitialize()
-        // {
-        //     _context = IData.CreateNewContext();
-        //     // clear all
-        //     _context.TruncateData();
-        // }
 
 
         [Test]
@@ -63,6 +44,10 @@ namespace DataTest.Tests
             Assert.IsTrue(_context.GetAllUser().Any(), "No readers were added.");
             Assert.IsTrue(_context.GetAllState().Any(), "No states were added.");
             Assert.IsTrue(_context.GetAllEvent().Any(), "No events were added.");
+            
+            _context.Dispose();
+
         }
+        
     }
 }

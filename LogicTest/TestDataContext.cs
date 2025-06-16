@@ -95,5 +95,14 @@ namespace LogicTest
             states.Clear();
             events.Clear();
         }
+
+        public void Dispose()
+        {
+            catalogs.Clear();
+            users.Clear();
+            states.Clear();
+            events.Clear();
+        }
+
     }
 }

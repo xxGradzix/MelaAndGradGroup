@@ -43,6 +43,7 @@ namespace Data.API
         {
             return new DataContext(connectionString);
         }
-        
+
+        void Dispose();
     }
 }
